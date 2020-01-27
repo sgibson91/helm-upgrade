@@ -13,9 +13,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "chart",
-    type=str,
-    help="Name of the Helm Chart to be updated.",
+    "chart", type=str, help="Name of the Helm Chart to be updated.",
 )
 
 parser.add_argument(
