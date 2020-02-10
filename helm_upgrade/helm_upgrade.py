@@ -47,6 +47,9 @@ class HelmUpgrade:
         if self.verbose:
             logging_config()
 
+        if self.dry_run and self.verbose:
+            logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
+
     def check_chart_versions(self):
         """Check if Helm Chart versions match"""
         charts = list(self.dependencies.keys())
@@ -58,8 +61,8 @@ class HelmUpgrade:
         if np.any(condition):
             if self.verbose:
                 logging.info(
-                    "New versions are available.\n"
-                    + "\n".join(
+                    "New versions are available.\n\t\t"
+                    + "\n\t\t".join(
                         [
                             (
                                 f"{chart}: {self.local_dependencies[chart]} --> {self.remote_dependencies[chart]}"
@@ -71,8 +74,7 @@ class HelmUpgrade:
                 if self.dry_run:
                     logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
                 else:
-                    # self.update_requirements_file(charts=list(compress(charts, condition)))
-                    pass
+                    self.update_requirements_file(charts=list(compress(charts, condition)))
         else:
             if self.verbose:
                 logging.info("All charts are up-to-date!")
@@ -143,3 +145,28 @@ class HelmUpgrade:
             chart_reqs["entries"][name], key=lambda k: k["created"],
         )
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
+
+    def update_requirements_file(self, charts):
+        """Update the requirements.yaml file of the local Helm Chart
+
+        Arguments:
+            charts {list of strings} -- List of Helm Chart names to be updated
+        """
+        file_path = os.path.join(HERE, self.chart, "requirements.yaml")
+
+        with open(file_path, "r") as stream:
+            chart_yaml = yaml.safe_load(stream)
+
+        for chart in charts:
+            if self.verbose:
+                logging.info("Updating version for: %s" % chart)
+
+            for dependency in chart_yaml["dependencies"]:
+                if dependency["name"] == chart:
+                    dependency["version"] = self.remote_dependencies[chart]
+
+        with open(file_path, "w") as stream:
+            yaml.safe_dump(chart_yaml, stream)
+
+        if self.verbose:
+            logging.info("Updated requirements in: %s" % file_path)
