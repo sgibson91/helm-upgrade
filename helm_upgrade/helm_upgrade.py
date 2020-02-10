@@ -74,7 +74,9 @@ class HelmUpgrade:
                 if self.dry_run:
                     logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
                 else:
-                    self.update_requirements_file(charts=list(compress(charts, condition)))
+                    self.update_requirements_file(
+                        charts=list(compress(charts, condition))
+                    )
         else:
             if self.verbose:
                 logging.info("All charts are up-to-date!")
