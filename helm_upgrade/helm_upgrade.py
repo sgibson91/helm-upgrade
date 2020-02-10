@@ -50,6 +50,12 @@ class HelmUpgrade:
         if self.dry_run and self.verbose:
             logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
 
+    def helm_upgrade(self):
+        """Main function of HelmUpgrade class. Collect chart versions, check
+        them and rewrite the requirements file if new versions are found."""
+        self.get_chart_versions()
+        self.check_chart_versions()
+
     def check_chart_versions(self):
         """Check if Helm Chart versions match"""
         charts = list(self.dependencies.keys())
