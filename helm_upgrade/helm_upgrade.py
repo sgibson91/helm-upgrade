@@ -1,4 +1,9 @@
 """Update Helm Chart dependencies."""
+import os
+
+
+HERE = os.path.dirname(__file__)
+ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
 
 def logging():
