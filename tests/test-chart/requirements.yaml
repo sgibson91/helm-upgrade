@@ -1,0 +1,10 @@
+dependencies:
+- name: binderhub
+  repository: https://jupyterhub.github.io/helm-chart
+  version: 0.2.0-n079.h351d336
+- name: nginx-ingress
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.29.5
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v0.10.0
