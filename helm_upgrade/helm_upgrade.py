@@ -85,10 +85,11 @@ class HelmUpgrade:
                 )
 
     def pull_version_from_chart_file(self, name, url):
-        """[summary]
+        """Function to pull the version of a Helm Chart from it's Chart.yaml
+        file.
 
         Arguments:
-            url {[type]} -- [description]
+            url {string} -- The URL of the Helm Chart's Chart.yaml file.
         """
         chart_reqs = yaml.safe_load(requests.get(url).text)
         self.remote_dependencies[name] = chart_reqs["version"]
