@@ -55,10 +55,19 @@ class HelmUpgrade:
             for chart in charts
         ]
 
-        if np.any(condition):
-            print(
-                "New chart versions are available for the following charts:\n%s"
-                % list(compress(charts, condition))
+        if np.any(condition) and self.verbose:
+            if self.dry_run:
+                logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
+            logging.info(
+                "New versions are available.\n"
+                + "\n".join(
+                    [
+                        (
+                            f"{chart}: {self.local_dependencies[chart]} --> {self.remote_dependencies[chart]}"
+                        )
+                        for chart in charts
+                    ]
+                )
             )
 
     def get_chart_versions(self):
