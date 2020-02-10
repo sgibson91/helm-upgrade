@@ -79,7 +79,9 @@ class HelmUpgrade:
                     )
                 )
                 if self.dry_run:
-                    logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")  # noqa: E501
+                    logging.info(
+                        "THIS IS A DRY-RUN. NO FILES WILL BE CHANGED."
+                    )  # noqa: E501
                 else:
                     self.update_requirements_file(
                         charts=list(compress(charts, condition))
@@ -101,7 +103,9 @@ class HelmUpgrade:
         filepath = os.path.join(HERE, self.chart, "requirements.yaml")
 
         if self.verbose:
-            logging.info("Reading local chart dependencies from: %s" % filepath)  # noqa: E501
+            logging.info(
+                "Reading local chart dependencies from: %s" % filepath
+            )  # noqa: E501
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
