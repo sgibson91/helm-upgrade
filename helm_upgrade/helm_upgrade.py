@@ -55,20 +55,27 @@ class HelmUpgrade:
             for chart in charts
         ]
 
-        if np.any(condition) and self.verbose:
-            if self.dry_run:
-                logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
-            logging.info(
-                "New versions are available.\n"
-                + "\n".join(
-                    [
-                        (
-                            f"{chart}: {self.local_dependencies[chart]} --> {self.remote_dependencies[chart]}"
-                        )
-                        for chart in charts
-                    ]
+        if np.any(condition):
+            if self.verbose:
+                logging.info(
+                    "New versions are available.\n"
+                    + "\n".join(
+                        [
+                            (
+                                f"{chart}: {self.local_dependencies[chart]} --> {self.remote_dependencies[chart]}"
+                            )
+                            for chart in charts
+                        ]
+                    )
                 )
-            )
+                if self.dry_run:
+                    logging.info("THIS IS A DRY-RUN. NO FILES WILL BE CHANGED.")
+                else:
+                    # self.update_requirements_file(charts=list(compress(charts, condition)))
+                    pass
+        else:
+            if self.verbose:
+                logging.info("All charts are up-to-date!")
 
     def get_chart_versions(self):
         """Automatically pull chart versions from local and remote hosts"""
