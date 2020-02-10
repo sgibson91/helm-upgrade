@@ -1,0 +1,26 @@
+name: CI-test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  out-of-date-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install package
+        run: |
+          python setup.py install
+      - name: Run helm-upgrade out-of-date standard
+        working-directory: ./tests
+        run: |
+          helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/{self.repo_owner}/{self.repo_name}/master/{self.chart_name}/requirements.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
