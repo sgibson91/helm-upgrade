@@ -1,6 +1,7 @@
 import sys
 import json
 import argparse
+from .helm_upgrade import HelmUpgrade
 
 DESCRIPTION = \
     "Update the dependencies of a Helm Chart in a project repository."
@@ -33,7 +34,7 @@ parser.add_argument(
 def main():
     """Main function"""
     args = parser.parse_args(sys.argv[1:])
-    print(args)
+    obj = HelmUpgrade(vars(args))
 
 
 if __name__ == "__main__":
