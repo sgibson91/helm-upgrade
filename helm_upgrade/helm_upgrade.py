@@ -51,10 +51,7 @@ class HelmUpgrade:
         """Check if Helm Chart versions match"""
         charts = list(self.dependencies.keys())
         condition = [
-            (
-                self.local_dependencies[chart] !=
-                self.remote_dependencies[chart]
-            )
+            (self.local_dependencies[chart] != self.remote_dependencies[chart])
             for chart in charts
         ]
 
