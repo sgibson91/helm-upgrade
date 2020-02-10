@@ -55,7 +55,9 @@ class HelmUpgrade:
         filepath = os.path.join(HERE, self.chart, "requirements.yaml")
 
         if self.verbose:
-            logging.info("Reading local chart dependencies from: %s" % filepath)
+            logging.info(
+                "Reading local chart dependencies from: %s" % filepath
+            )
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
