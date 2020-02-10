@@ -1,9 +1,10 @@
 """Update Helm Chart dependencies."""
 import os
+import yaml
 
 
-HERE = os.path.dirname(__file__)
-ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
+HERE = os.getcwd()
+ABSOLUTE_HERE = os.path.dirname(os.getcwd())
 
 
 def logging():
@@ -44,3 +45,19 @@ class HelmUpgrade:
         # Turn on logging
         if self.verbose:
             logging()
+
+    def get_local_chart_versions(self):
+        """Get the versions of the chart dependencies the local chart is
+        currently pulling.
+
+        Arguments:
+            chart_name {string} -- Name of the local helm chart
+        """
+        self.local_dependencies = {}
+
+        filepath = os.path.join(HERE, self.chart, "requirements.yaml")
+        with open(filepath, "r") as stream:
+            chart_deps = yaml.safe_load(stream)
+
+        for dependency in chart_deps["dependencies"]:
+            self.local_dependencies[dependency["name"]] = dependency["version"]
