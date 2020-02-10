@@ -31,10 +31,11 @@ git clone https://github.com/sgibson91/helm-upgrade.git
 cd helm-upgrade
 ```
 
-Use Python to install the package.
+Use Python to install requirements and the package.
 Python 3.7 is recommended.
 
 ```bash
+python -m pip install -r requirements.txt
 python setup.py install
 ```
 
