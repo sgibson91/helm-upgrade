@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  out-of-date-standard:
+  standard:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,12 +24,12 @@ jobs:
       - name: Install helm-upgrade package
         run: |
           python setup.py install
-      - name: Run helm-upgrade out-of-date standard
+      - name: Run helm-upgrade test-chart standard
         working-directory: ./tests
         run: |
-          helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
+          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
 
-  out-of-date-verbose:
+  verbose:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -44,12 +44,12 @@ jobs:
       - name: Install helm-upgrade package
         run: |
           python setup.py install
-      - name: Run helm-upgrade out-of-date verbose
+      - name: Run helm-upgrade test-chart verbose
         working-directory: ./tests
         run: |
-          helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --verbose
+          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --verbose
 
-  out-of-date-dry-run:
+  dry-run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -64,12 +64,12 @@ jobs:
       - name: Install helm-upgrade package
         run: |
           python setup.py install
-      - name: Run helm-upgrade out-of-date dry-run
+      - name: Run helm-upgrade test-chart dry-run
         working-directory: ./tests
         run: |
-          helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run
+          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run
 
-  out-of-date-both:
+  verbose-dry-run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -84,7 +84,7 @@ jobs:
       - name: Install helm-upgrade package
         run: |
           python setup.py install
-      - name: Run helm-upgrade out-of-date both
+      - name: Run helm-upgrade test-chart verbose dry-run
         working-directory: ./tests
         run: |
-          helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run --verbose
+          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run --verbose
