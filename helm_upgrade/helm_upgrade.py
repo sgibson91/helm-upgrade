@@ -4,6 +4,10 @@ import yaml
 import logging
 import requests
 
+import numpy as np
+
+from itertools import compress
+
 
 HERE = os.getcwd()
 ABSOLUTE_HERE = os.path.dirname(os.getcwd())
@@ -19,9 +23,8 @@ def logging_config():
 
 
 class HelmUpgrade:
-    """
-    HelmUpgrade class for interacting with the Helm Chart repos and making
-    changes to a local Helm Chart requirements file.
+    """HelmUpgrade class for interacting with the Helm Chart repos and making
+    changes to a local Helm Chart requirements file
 
     Attributes:
         chart (str): The Helm Chart name
@@ -32,10 +35,10 @@ class HelmUpgrade:
     """
 
     def __init__(self, argsDict):
-        """The constructor for HelmUpgrade class.
+        """The constructor for HelmUpgrade class
 
         Arguments:
-            argsDict {dict} -- A dictionary of values parsed from argparse.
+            argsDict {dict} -- A dictionary of values parsed from argparse
         """
         for k, v in argsDict.items():
             setattr(self, k, v)
@@ -44,17 +47,31 @@ class HelmUpgrade:
         if self.verbose:
             logging_config()
 
+    def check_chart_versions(self):
+        """Check if Helm Chart versions match"""
+        charts = list(self.dependencies.keys())
+        condition = [
+            (
+                self.local_dependencies[chart] !=
+                self.remote_dependencies[chart]
+            )
+            for chart in charts
+        ]
+
+        if np.any(condition):
+            print(
+                "New chart versions are available for the following charts:\n%s"
+                % list(compress(charts, condition))
+            )
+
     def get_chart_versions(self):
-        """Function to automatically pull chart versions from local and remote
-        hosts.
-        """
+        """Automatically pull chart versions from local and remote hosts"""
         self.get_local_chart_versions()
         self.get_remote_chart_versions()
 
     def get_local_chart_versions(self):
         """Get the versions of the chart dependencies the local chart is
-        currently pulling.
-        """
+        currently pulling"""
         self.local_dependencies = {}
 
         filepath = os.path.join(HERE, self.chart, "requirements.yaml")
@@ -70,8 +87,7 @@ class HelmUpgrade:
 
     def get_remote_chart_versions(self):
         """Get the most recent version of the chart dependencies from the
-        remote helm repository.
-        """
+        remote helm repository"""
         self.remote_dependencies = {}
 
         for dependency in self.dependencies.keys():
@@ -93,8 +109,7 @@ class HelmUpgrade:
                 )
 
     def pull_version_from_chart_file(self, name, url):
-        """Function to pull the version of a Helm Chart from it's Chart.yaml
-        file.
+        """Pull the version of a Helm Chart from it's Chart.yaml file
 
         Arguments:
             name {string} -- The name of the Helm Chart
@@ -104,8 +119,7 @@ class HelmUpgrade:
         self.remote_dependencies[name] = chart_reqs["version"]
 
     def pull_version_from_github_pages(self, name, url):
-        """Function to pull the version of a Helm Chart from a GitHub Pages
-        host.
+        """Pull the version of a Helm Chart from a GitHub Pages host
 
         Arguments:
             name {string} -- The name of the Helm Chart
