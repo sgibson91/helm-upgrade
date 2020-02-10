@@ -6,6 +6,7 @@ import requests
 
 import numpy as np
 
+from bs4 import BeautifulSoup
 from itertools import compress
 
 
@@ -130,6 +131,10 @@ class HelmUpgrade:
                 self.pull_version_from_github_pages(
                     name=dependency, url=self.dependencies[dependency],
                 )
+            elif self.dependencies[dependency].endswith("/releases/latest"):
+                self.pull_version_from_github_releases(
+                    name=dependency, url=self.dependencies[dependency],
+                )
 
     def pull_version_from_chart_file(self, name, url):
         """Pull the version of a Helm Chart from it's Chart.yaml file
@@ -153,6 +158,27 @@ class HelmUpgrade:
             chart_reqs["entries"][name], key=lambda k: k["created"],
         )
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
+
+    def pull_version_from_github_releases(self, name, url):
+        """Pull the version of a Helm Chart from a GitHub Release
+
+        Arguments:
+            name {string} -- The name of the Helm Chart
+            url {string} -- The URL of the GitHub Releases page
+        """
+        res = requests.get(url)
+        soup = BeautifulSoup(res.content, "html.parser")
+
+        links = soup.find_all("a", attrs={"title": True})
+
+        for link in links:
+            if (
+                (link.span is not None)
+                and ("v" in link.span.text)
+                and ("." in link.span.text)
+            ):
+
+                self.remote_dependencies[name] = link.span.text
 
     def update_requirements_file(self, charts):
         """Update the requirements.yaml file of the local Helm Chart
