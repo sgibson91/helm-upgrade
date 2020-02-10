@@ -1,20 +1,17 @@
 """Update Helm Chart dependencies."""
 import os
 import yaml
+import logging
 
 
 HERE = os.getcwd()
 ABSOLUTE_HERE = os.path.dirname(os.getcwd())
 
 
-def logging():
+def logging_config():
     """Enable logging configuration."""
-    import logging
-
     logging.basicConfig(
         level=logging.DEBUG,
-        filename="helm_upgrade.log",
-        filemode="a",
         format="[%(asctime)s %(levelname)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
@@ -44,9 +41,9 @@ class HelmUpgrade:
 
         # Turn on logging
         if self.verbose:
-            logging()
+            logging_config()
 
-    def get_local_chart_versions(self):
+    def get_local_chart_versions(self, verbose=False):
         """Get the versions of the chart dependencies the local chart is
         currently pulling.
 
@@ -56,6 +53,10 @@ class HelmUpgrade:
         self.local_dependencies = {}
 
         filepath = os.path.join(HERE, self.chart, "requirements.yaml")
+
+        if self.verbose:
+            logging.info("Reading local chart dependencies from: %s" % filepath)
+
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
 
