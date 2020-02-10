@@ -3,12 +3,11 @@ import json
 import argparse
 from .helm_upgrade import HelmUpgrade
 
-DESCRIPTION = \
-    "Update the dependencies of a Helm Chart in a project repository."
+DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 
 parser.add_argument(
-    "chart", type=str, help="Name of the Helm Chart to be updated.",
+    "chart", type=str, help="Name of the local Helm Chart to be updated.",
 )
 
 parser.add_argument(
@@ -23,7 +22,7 @@ parser.add_argument(
 parser.add_argument(
     "--dry-run",
     action="store_true",
-    help="Perform a dry run of the update. Don't push the changes to GitHub.",
+    help="Perform a dry run of the update. Don't write the changes to a file.",
 )
 
 parser.add_argument(
