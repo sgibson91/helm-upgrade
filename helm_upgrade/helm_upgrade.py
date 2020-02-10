@@ -75,5 +75,5 @@ class HelmUpgrade:
                     % (dependency, self.dependencies[dependency],)
                 )
 
-            if "raw.githubusercontent.com" in self.dependencies[dependency]:
-                self.pull_versions_from_github(url=self.dependencies[dependency],)
+            if self.dependencies[dependency].endswith("Chart.yaml"):
+                self.pull_version_from_chart_file(url=self.dependencies[dependency])
