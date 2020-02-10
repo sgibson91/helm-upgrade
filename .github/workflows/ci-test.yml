@@ -64,7 +64,27 @@ jobs:
       - name: Install helm-upgrade package
         run: |
           python setup.py install
-      - name: Run helm-upgrade out-of-date verbose
+      - name: Run helm-upgrade out-of-date dry-run
         working-directory: ./tests
         run: |
           helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run
+
+  out-of-date-both:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+      - name: Install helm-upgrade package
+        run: |
+          python setup.py install
+      - name: Run helm-upgrade out-of-date both
+        working-directory: ./tests
+        run: |
+          helm-upgrade test-chart-out-of-date '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run --verbose
