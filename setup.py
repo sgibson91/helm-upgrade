@@ -18,7 +18,7 @@ setup(
     url="https://sgibson91.github.io/",
     # this should be a whitespace separated string of keywords, not a list
     keywords="development helm dependencies",
-    description="Update the dependencies of a helm chart to the latest published versions.",
+    description="Update the dependencies of a helm chart to the latest published versions.",  # noqa: E501
     long_description=open("./README.md", "r").read(),
     long_description_content_type="text/markdown",
     license="MIT",
