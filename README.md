@@ -2,6 +2,7 @@
 
 | | Status |
 | :--- | :--- |
+| CI Tests | ![GitHub Actions - CI Tests](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg) |
 | Black | ![GitHub Actions - Black](https://github.com/sgibson91/helm-upgrade/workflows/Black/badge.svg) |
 | Flake8 | ![GitHub Actions - Flake8](https://github.com/sgibson91/helm-upgrade/workflows/Flake8/badge.svg) |
 
