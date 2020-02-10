@@ -2,7 +2,8 @@ import sys
 import json
 import argparse
 
-DESCRIPTION = "Update the dependencies of a Helm Chart in a project repository."
+DESCRIPTION = \
+    "Update the dependencies of a Helm Chart in a project repository."
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 
 parser.add_argument(
@@ -14,7 +15,8 @@ parser.add_argument(
     type=json.loads,
     help="""A dictionary of Helm Chart dependencies and their host repo URLs.
     E.g. '{"nginx-ingress":
-    "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"}'""",
+    "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"}'
+    """,
 )
 
 parser.add_argument(
