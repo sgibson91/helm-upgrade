@@ -83,13 +83,34 @@ class HelmUpgrade:
                     name=dependency,
                     url=self.dependencies[dependency],
                 )
+            elif "/gh-pages/" in self.dependencies[dependency]:
+                self.pull_version_from_github_pages(
+                    name=dependency,
+                    url=self.dependencies[dependency],
+                )
 
     def pull_version_from_chart_file(self, name, url):
         """Function to pull the version of a Helm Chart from it's Chart.yaml
         file.
 
         Arguments:
-            url {string} -- The URL of the Helm Chart's Chart.yaml file.
+            name {string} -- The name of the Helm Chart
+            url {string} -- The URL of the Helm Chart's Chart.yaml file
         """
         chart_reqs = yaml.safe_load(requests.get(url).text)
         self.remote_dependencies[name] = chart_reqs["version"]
+
+    def pull_version_from_github_pages(self, name, url):
+        """Function to pull the version of a Helm Chart from a GitHub Pages
+        host.
+
+        Arguments:
+            name {string} -- The name of the Helm Chart
+            url {string} -- The URL of the Helm Chart's GitHub Pages host
+        """
+        chart_reqs = yaml.safe_load(requests.get(url).text)
+        updates_sorted = sorted(
+            chart_reqs["entries"][name],
+            key=lambda k: k["created"],
+        )
+        self.remote_dependencies[name] = updates_sorted[-1]["version"]
