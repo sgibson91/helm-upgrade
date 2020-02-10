@@ -44,6 +44,13 @@ class HelmUpgrade:
         if self.verbose:
             logging_config()
 
+    def get_chart_versions(self):
+        """Function to automatically pull chart versions from local and remote
+        hosts.
+        """
+        self.get_local_chart_versions()
+        self.get_remote_chart_versions()
+
     def get_local_chart_versions(self):
         """Get the versions of the chart dependencies the local chart is
         currently pulling.
