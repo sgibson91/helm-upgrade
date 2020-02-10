@@ -2,6 +2,7 @@
 import os
 import yaml
 import logging
+import requests
 
 
 HERE = os.getcwd()
@@ -76,4 +77,16 @@ class HelmUpgrade:
                 )
 
             if self.dependencies[dependency].endswith("Chart.yaml"):
-                self.pull_version_from_chart_file(url=self.dependencies[dependency])
+                self.pull_version_from_chart_file(
+                    name=dependency,
+                    url=self.dependencies[dependency],
+                )
+
+    def pull_version_from_chart_file(self, name, url):
+        """[summary]
+
+        Arguments:
+            url {[type]} -- [description]
+        """
+        chart_reqs = yaml.safe_load(requests.get(url).text)
+        self.remote_dependencies[name] = chart_reqs["version"]
