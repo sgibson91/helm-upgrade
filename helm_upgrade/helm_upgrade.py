@@ -53,9 +53,7 @@ class HelmUpgrade:
         filepath = os.path.join(HERE, self.chart, "requirements.yaml")
 
         if self.verbose:
-            logging.info(
-                "Reading local chart dependencies from: %s" % filepath
-            )
+            logging.info("Reading local chart dependencies from: %s" % filepath)
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
@@ -80,13 +78,11 @@ class HelmUpgrade:
 
             if self.dependencies[dependency].endswith("Chart.yaml"):
                 self.pull_version_from_chart_file(
-                    name=dependency,
-                    url=self.dependencies[dependency],
+                    name=dependency, url=self.dependencies[dependency],
                 )
             elif "/gh-pages/" in self.dependencies[dependency]:
                 self.pull_version_from_github_pages(
-                    name=dependency,
-                    url=self.dependencies[dependency],
+                    name=dependency, url=self.dependencies[dependency],
                 )
 
     def pull_version_from_chart_file(self, name, url):
@@ -110,7 +106,6 @@ class HelmUpgrade:
         """
         chart_reqs = yaml.safe_load(requests.get(url).text)
         updates_sorted = sorted(
-            chart_reqs["entries"][name],
-            key=lambda k: k["created"],
+            chart_reqs["entries"][name], key=lambda k: k["created"],
         )
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
