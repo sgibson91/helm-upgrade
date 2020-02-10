@@ -3,7 +3,8 @@ import json
 import argparse
 from .helm_upgrade import HelmUpgrade
 
-DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."
+DESCRIPTION = \
+    "Update the dependencies of a local Helm Chart in a project repository."
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 
 parser.add_argument(
