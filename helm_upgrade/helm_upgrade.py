@@ -43,24 +43,37 @@ class HelmUpgrade:
         if self.verbose:
             logging_config()
 
-    def get_local_chart_versions(self, verbose=False):
+    def get_local_chart_versions(self):
         """Get the versions of the chart dependencies the local chart is
         currently pulling.
-
-        Arguments:
-            chart_name {string} -- Name of the local helm chart
         """
         self.local_dependencies = {}
 
         filepath = os.path.join(HERE, self.chart, "requirements.yaml")
 
         if self.verbose:
-            logging.info(
-                "Reading local chart dependencies from: %s" % filepath
-            )
+            logging.info("Reading local chart dependencies from: %s" % filepath)
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
 
         for dependency in chart_deps["dependencies"]:
             self.local_dependencies[dependency["name"]] = dependency["version"]
+
+    def get_remote_chart_versions(self):
+        """Get the most recent version of the chart dependencies from the
+        remote helm repository.
+        """
+        self.remote_dependencies = {}
+
+        for dependency in self.dependencies.keys():
+            if self.verbose:
+                logging.info(
+                    """Retrieving the most recent version of
+                           chart: %s
+                           repository: %s"""
+                    % (dependency, self.dependencies[dependency],)
+                )
+
+            if "raw.githubusercontent.com" in self.dependencies[dependency]:
+                self.pull_versions_from_github(url=self.dependencies[dependency],)
