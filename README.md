@@ -1,5 +1,7 @@
 # helm-upgrade
 
+[![PyPI version](https://badge.fury.io/py/helm-upgrade.svg)](https://badge.fury.io/py/helm-upgrade)
+
 | | Status |
 | :--- | :--- |
 | CI Tests | ![GitHub Actions - CI Tests](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg) |
