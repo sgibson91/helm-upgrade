@@ -3,9 +3,7 @@ import json
 import argparse
 from .helm_upgrade import HelmUpgrade
 
-DESCRIPTION = (
-    "Update the dependencies of a local Helm Chart in a project repository."
-)  # noqa: E501
+DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."  # noqa: E501
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 
 parser.add_argument(
