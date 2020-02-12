@@ -14,6 +14,7 @@ Then this is the tool for you!
 This tool was inspired by [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) and [Chris Holdgraf's github-activity tool](https://github.com/choldgraf/github-activity).
 
 - [Installation](#installation)
+  - [`pip`](#pip)
   - [Manual](#manual)
 - [Usage](#usage)
   - [Remote Helm Charts](#remote-helm-charts)
@@ -21,6 +22,14 @@ This tool was inspired by [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub
 ---
 
 ## Installation
+
+It's recommended to use Python version 3.7 with this tool.
+
+### `pip`
+
+```bash
+pip install helm-upgrade
+```
 
 ### Manual
 
