@@ -124,20 +124,20 @@ class HelmUpgrade:
                     """Retrieving the most recent version of
                            chart: %s
                            repository: %s"""
-                    % (dependency, self.dependencies[dependency],)
+                    % (dependency, self.dependencies[dependency])
                 )
 
             if self.dependencies[dependency].endswith("Chart.yaml"):
                 self.pull_version_from_chart_file(
-                    name=dependency, url=self.dependencies[dependency],
+                    name=dependency, url=self.dependencies[dependency]
                 )
             elif "/gh-pages/" in self.dependencies[dependency]:
                 self.pull_version_from_github_pages(
-                    name=dependency, url=self.dependencies[dependency],
+                    name=dependency, url=self.dependencies[dependency]
                 )
             elif self.dependencies[dependency].endswith("/releases/latest"):
                 self.pull_version_from_github_releases(
-                    name=dependency, url=self.dependencies[dependency],
+                    name=dependency, url=self.dependencies[dependency]
                 )
 
     def pull_version_from_chart_file(self, name, url):
@@ -158,9 +158,7 @@ class HelmUpgrade:
             url {string} -- The URL of the Helm Chart's GitHub Pages host
         """
         chart_reqs = yaml.safe_load(requests.get(url).text)
-        updates_sorted = sorted(
-            chart_reqs["entries"][name], key=lambda k: k["created"],
-        )
+        updates_sorted = sorted(chart_reqs["entries"][name], key=lambda k: k["created"])
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
 
     def pull_version_from_github_releases(self, name, url):
