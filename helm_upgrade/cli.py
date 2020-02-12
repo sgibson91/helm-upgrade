@@ -6,11 +6,13 @@ from .helm_upgrade import HelmUpgrade
 
 def parse_args():
     """Construct a command line argument parser"""
-    DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."  # noqa: E501
+    DESCRIPTION = (
+        "Update the dependencies of a local Helm Chart in a project repository."
+    )  # noqa: E501
     parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     parser.add_argument(
-        "chart", type=str, help="Name of the local Helm Chart to be updated.",
+        "chart", type=str, help="Name of the local Helm Chart to be updated."
     )
 
     parser.add_argument(
