@@ -158,7 +158,9 @@ class HelmUpgrade:
             url {string} -- The URL of the Helm Chart's GitHub Pages host
         """
         chart_reqs = yaml.safe_load(requests.get(url).text)
-        updates_sorted = sorted(chart_reqs["entries"][name], key=lambda k: k["created"])
+        updates_sorted = sorted(
+            chart_reqs["entries"][name], key=lambda k: k["created"]
+        )  # noqa: E501
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
 
     def pull_version_from_github_releases(self, name, url):
