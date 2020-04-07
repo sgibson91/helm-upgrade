@@ -142,12 +142,8 @@ Below is a table with the currently used labels in the repo.
 
 | Label | Description |
 | :--- | :--- |
-| `azure` | Issues related to deployment to Azure |
 | `bug` | Something isn't working |
 | `documentation` | Improvements or additions to the documentation |
 | `enhancement` | New feature or request |
 | `good first issue` | Good for newcomers |
 | `help wanted` | Extra attention is needed |
-| `linux` | Issues related to local installation on Linux |
-| `osx` | Issues related to local installation on Mac OSX |
-| `windows` | Issues related to local installation on Windows |
