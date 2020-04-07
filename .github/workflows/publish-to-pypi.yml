@@ -4,8 +4,9 @@ on:
   push:
     paths:
       - 'helm_upgrade/**'
-    tags:
-      - v*
+  release:
+    types:
+      - published
 
 jobs:
   build-n-publish:

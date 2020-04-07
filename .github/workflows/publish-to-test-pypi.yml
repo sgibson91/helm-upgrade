@@ -4,9 +4,6 @@ on:
   push:
     paths:
       - 'helm_upgrade/**'
-  pull_request:
-    branches:
-      - master
 
 jobs:
   build-n-publish:
