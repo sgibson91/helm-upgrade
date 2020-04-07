@@ -2,8 +2,8 @@ name: Publish Python distributions to TestPyPI
 
 on:
   push:
-    branches:
-      - master
+    paths:
+      - 'helm_upgrade/**'
 
 jobs:
   build-n-publish:

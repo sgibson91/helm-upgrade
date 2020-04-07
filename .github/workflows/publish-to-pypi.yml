@@ -2,10 +2,11 @@ name: Publish Python distributions to PyPI
 
 on:
   push:
-    branches:
-      - master
-    tags:
-      - v*
+    paths:
+      - 'helm_upgrade/**'
+  release:
+    types:
+      - published
 
 jobs:
   build-n-publish:
