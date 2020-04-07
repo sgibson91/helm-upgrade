@@ -33,8 +33,14 @@ If the two versions do not match, `helm-upgrade` will overwrite `requirements.ya
 
 There are also optional command line flags for verbose output and to perform a dry run (`requirements.yaml` will not be overwritten).
 
-- :file_folder: The package is contained within the `helm_upgrade` folder
+- :question: Package information for building and distributing to PyPI is contained within `setup.py`
+- :pushpin: The package dependencies are defined in `requirements.txt`
+- :file_folder: The package itself is contained within the `helm_upgrade` folder
 - :snake: The `HelmUpgrade` Python class is defined in `helm_upgrade.py`
 - :video_game: The cli is defined in `cli.py`
 
 ### :recycle: Continuous Integration
+
+This repository uses [GitHub Actions](https://help.github.com/en/actions) :runner: :dash: to run tests.
+These are defined in the `.github/workflows` folder.
+An example Helm chart `requirements.yaml` file is given in the `test-chart` folder to run tests against.
