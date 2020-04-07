@@ -15,6 +15,8 @@ Use your best judgement and feel free to propose changes to this document in a P
 - [:gift: How can I contribute?](#gift-how-can-i-contribute)
   - [:bug: Reporting Bugs](#bug-reporting-bugs)
   - [:sparkles: Requesting Features](#sparkles-requesting-features)
+  - [:hatching_chick: Your First Contribution](#hatching_chick-your-first-contribution)
+  - [:arrow_right: Pull Requests](#arrow_right-pull-requests)
 
 ---
 
@@ -69,3 +71,29 @@ You may also leave any thoughts or offers for support as new comments on the iss
 
 If you don't find an issue describing your feature, please [open a feature request](https://github.com/sgibson91/helm-upgrade/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=).
 This repository has a [feature request template](.github/ISSUE_TEMPLATE/feature_request.md) to help you map out the feature you'd like.
+
+### :hatching_chick: Your First Contribution
+
+Unsure where to start contributing?
+Check out the [help-wanted issues](https://github.com/sgibson91/helm-upgrade/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) to see where the project is looking for input.
+
+### :arrow_right: Pull Requests
+
+A Pull Request is a means for [people to collaboratively review and work on changes](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) before they are introduced into the base branch of the code base.
+
+To prepare your contribution for review, please follow these steps:
+
+1. [Fork this repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo)
+2. [Create a new branch](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository) on your fork
+   1. Where possible and appropriate, please use the following convention when naming your branch: `<type>/<issue-number>/<short-description>`.
+      For example, if your contribution is fixing a a typo that was flagged in issue number 11, your branch name would be as follows: `fix/11/typo`.
+3. Edit files or add new ones!
+4. [Open your Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)
+   1. This repository has a [pull request template](.github/PULL_REQUEST_TEMPLATE.md) which will help you summarise your contribution and help reviewers know where to focus their feedback.
+      Please complete it where possible and appropriate.
+
+Congratulations! :tada:
+You are now a `helm-upgrade` developer! :space_invader:
+
+The project maintainers will then review your Pull Request and may ask for some changes.
+Once you and the maintainers are happy, your contribution will be merged!
