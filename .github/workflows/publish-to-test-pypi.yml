@@ -1,6 +1,9 @@
 name: Publish Python distributions to TestPyPI
 
 on:
+  push:
+    paths:
+      - 'helm_upgrade/**'
   pull_request:
     branches:
       - master
