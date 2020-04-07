@@ -17,6 +17,10 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:sparkles: Requesting Features](#sparkles-requesting-features)
   - [:hatching_chick: Your First Contribution](#hatching_chick-your-first-contribution)
   - [:arrow_right: Pull Requests](#arrow_right-pull-requests)
+- [:art: Styleguides](#art-styleguides)
+  - [:snake: Python Styleguide](#snake-python-styleguide)
+  - [:pencil: Markdown Styleguide](#pencil-markdown-styleguide)
+  - [:tada: Git Commit Message Styleguide](#tada-git-commit-message-styleguide)
 
 ---
 
@@ -97,3 +101,31 @@ You are now a `helm-upgrade` developer! :space_invader:
 
 The project maintainers will then review your Pull Request and may ask for some changes.
 Once you and the maintainers are happy, your contribution will be merged!
+
+## :art: Styleguides
+
+### :snake: Python Styleguide
+
+When writing Python scripts for this repository, it is recommended that contributors use [black](https://github.com/psf/black) and [flake8](https://flake8.pycqa.org/en/latest/) for formatting and linting styles.
+The repository has GitHub Actions to check files are conforming to this styleguide, though not doing so will not prevent your contribution from being merged.
+These tools are used as the maintainers believe this makes the code easier to read and keeps consistent formatting as more people contribute to the project.
+
+While flake8 commands can be [disabled](https://flake8.pycqa.org/en/latest/user/violations.html), we only recommend doing this for [specific lines](https://flake8.pycqa.org/en/latest/user/violations.html#in-line-ignoring-errors) in such cases where reformatting would produce "ugly code".
+The maintainers retain final say on what is "ugly code" on a case-by-case basis.
+
+### :pencil: Markdown Styleguide
+
+Documentation files are written in [Markdown](https://guides.github.com/features/mastering-markdown/).
+
+When writing Markdown, it is recommended to start a new sentence on a new line and define a new paragraph by leaving a single blank line.
+(Check out the raw version of this file for an example!)
+While the sentences will render as a single paragraph; when suggestions are made on Pull Requests, the GitHub User Interface will only highlight the affected sentence - not the whole paragraph.
+This makes reviews much easier to read!
+
+### :tada: Git Commit Message Styleguide
+
+There are many resources for [writing good commit messages](https://thoughtbot.com/blog/5-useful-tips-for-a-better-commit-message).
+Please make them as descriptive as possible so other people can work out what a commit did and why it was necessary.
+
+Emojis are also _highly_ encouraged :wink:
+See the [gitmoji project](https://gitmoji.carloscuesta.me/) for a guide on how to use emojis to describe the nature of the commit.
