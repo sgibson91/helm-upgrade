@@ -15,25 +15,28 @@ Then this is the tool for you!
 
 This tool was inspired by [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) and [Chris Holdgraf's github-activity tool](https://github.com/choldgraf/github-activity).
 
-- [Installation](#installation)
-  - [`pip`](#pip)
-  - [Manual](#manual)
-- [Usage](#usage)
-  - [Remote Helm Charts](#remote-helm-charts)
+**Table of Contents**
+
+- [:rocket: Installation](#rocket-installation)
+  - [:snake: `pip`](#snake-pip)
+  - [:wrench: Manual](#wrench-manual)
+- [:recycle: Usage](#recycle-usage)
+  - [:wheel_of_dharma: Remote Helm Charts](#wheel_of_dharma-remote-helm-charts)
+- [:sparkles: Contributing](#sparkles-contributing)
 
 ---
 
-## Installation
+## :rocket: Installation
 
 It's recommended to use Python version 3.7 with this tool.
 
-### `pip`
+### :snake: `pip`
 
 ```bash
 pip install helm-upgrade
 ```
 
-### Manual
+### :wrench: Manual
 
 First of all, clone this repository and change into it.
 
@@ -56,7 +59,7 @@ Test the installation by calling the help page.
 helm-upgrade --help
 ```
 
-## Usage
+## :recycle: Usage
 
 ```
 usage: helm-upgrade [-h] [--dry-run] [-v] chart dependencies
@@ -98,7 +101,7 @@ In this example, the `name` argument would be `my-local-helm-chart`.
 
 The `--verbose` flag will print logs to the console and the `--dry-run` flag will skip the file writing step.
 
-### Remote Helm Charts
+### :wheel_of_dharma: Remote Helm Charts
 
 `helm-upgrade` currently recognises chart versions from three types of hosts.
 
@@ -116,3 +119,8 @@ The `--verbose` flag will print logs to the console and the `--dry-run` flag wil
    These URLs end with "`/releases/latest`" and uses `BeautifulSoup` to search the html.
 
    For example, <https://github.com/jetstack/cert-manager/releases/latest>
+
+## :sparkles: Contributing
+
+:tada: Thank you for wanting to contribute! :tada:
+Make sure to read our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing Guidelines](CONTRIBUTING.md) to get you started.
