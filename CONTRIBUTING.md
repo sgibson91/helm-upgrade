@@ -21,6 +21,8 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:snake: Python Styleguide](#snake-python-styleguide)
   - [:pencil: Markdown Styleguide](#pencil-markdown-styleguide)
   - [:tada: Git Commit Message Styleguide](#tada-git-commit-message-styleguide)
+- [:notebook: Additional Notes](#notebook-additional-notes)
+  - [:label: Issue and Pull Request Labels](#label-issue-and-pull-request-labels)
 
 ---
 
@@ -79,7 +81,7 @@ This repository has a [feature request template](.github/ISSUE_TEMPLATE/feature_
 ### :hatching_chick: Your First Contribution
 
 Unsure where to start contributing?
-Check out the [help-wanted issues](https://github.com/sgibson91/helm-upgrade/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) to see where the project is looking for input.
+Check out the [good first issue](https://github.com/sgibson91/helm-upgrade/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) and [helpwanted](https://github.com/sgibson91/helm-upgrade/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) issues to see where the project is looking for input.
 
 ### :arrow_right: Pull Requests
 
@@ -129,3 +131,23 @@ Please make them as descriptive as possible so other people can work out what a 
 
 Emojis are also _highly_ encouraged :wink:
 See the [gitmoji project](https://gitmoji.carloscuesta.me/) for a guide on how to use emojis to describe the nature of the commit.
+
+## :notebook: Additional Notes
+
+### :label: Issue and Pull Request Labels
+
+Issues and Pull Requests can have labels assigned to them which indicate at a glance what aspects of the project they describe.
+It is also possible to [sort issues by label](https://help.github.com/en/github/managing-your-work-on-github/filtering-issues-and-pull-requests-by-labels) making it easier to track down specific issues.
+Below is a table with the currently used labels in the repo.
+
+| Label | Description |
+| :--- | :--- |
+| `azure` | Issues related to deployment to Azure |
+| `bug` | Something isn't working |
+| `documentation` | Improvements or additions to the documentation |
+| `enhancement` | New feature or request |
+| `good first issue` | Good for newcomers |
+| `help wanted` | Extra attention is needed |
+| `linux` | Issues related to local installation on Linux |
+| `osx` | Issues related to local installation on Mac OSX |
+| `windows` | Issues related to local installation on Windows |
