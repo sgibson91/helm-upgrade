@@ -4,9 +4,9 @@
 
 | | Status |
 | :--- | :--- |
-| CI Tests | ![GitHub Actions - CI Tests](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg) |
-| Black | ![GitHub Actions - Black](https://github.com/sgibson91/helm-upgrade/workflows/Black/badge.svg) |
-| Flake8 | ![GitHub Actions - Flake8](https://github.com/sgibson91/helm-upgrade/workflows/Flake8/badge.svg) |
+| CI Tests | [![CI-test](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ACI-test+branch%3Amain) |
+| Black | [![Black](https://github.com/sgibson91/helm-upgrade/workflows/Black/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ABlack+branch%3Amain) |
+| Flake8 | [![Flake8](https://github.com/sgibson91/helm-upgrade/workflows/Flake8/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3AFlake8+branch%3Amain) |
 
 Do you manage a Helm Chart that has dependencies on other Helm Charts?
 Are you fed up of manually updating these dependencies?
