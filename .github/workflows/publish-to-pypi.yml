@@ -1,7 +1,7 @@
 name: Publish Python distributions to PyPI
 
 on:
-  push:
+  pull_request:
     paths:
       - 'helm_upgrade/**'
   release:
@@ -12,20 +12,34 @@ jobs:
   build-n-publish:
     name: Build and publish Python distribution to PyPI
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout the repo
+        uses: actions/checkout@master
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install -r requirements.txt
+
       - name: Create a distribution
         run: |
           python setup.py sdist bdist_wheel
+
+      - name: Publish distribution to TestPyPI
+        if: github.event.pull_request
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.test_pypi_password }}
+          repository_url: https://test.pypi.org/legacy/
+
       - name: Publish tagged distributions to PyPI
+        if: github.event.release
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.pypi_password }}
