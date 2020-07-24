@@ -62,17 +62,38 @@ helm-upgrade --help
 ## :recycle: Usage
 
 ```
-usage: helm-upgrade [-h] [--dry-run] [-v] chart dependencies
-
+usage: helm-upgrade [-h] {version,run} ...
 Update the dependencies of a local Helm Chart in a project repository.
 
 positional arguments:
-  chart          Name of the local Helm Chart to be updated
-  dependencies   A dictionary of Helm Chart dependencies and their host repo URLs.
-                 For example, '{"nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"}'
+  {version,run}
+    version      Print the version and exit
+    run          Update the dependencies of a helm chart
 
 optional arguments:
-  --dry-run      Perform a dry run of the update. Don't write the changes to a file.
+  -h, --help     show this help message and exit
+```
+
+```bash
+usage: helm-upgrade version [-h]
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+```bash
+usage: helm-upgrade run [-h] [--dry-run] [-v] chart dependencies
+
+positional arguments:
+  chart          Name of the local Helm Chart to be updated.
+  dependencies   A dictionary of Helm Chart dependencies and their host repo
+                 URLs. E.g. '{"nginx-ingress": "https://raw.githubusercontent.
+                 com/helm/charts/master/stable/nginx-ingress/Chart.yaml"}'
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --dry-run      Perform a dry run of the update. Don't write the changes to a
+                 file.
   -v, --verbose  Option to turn on logging.
 ```
 

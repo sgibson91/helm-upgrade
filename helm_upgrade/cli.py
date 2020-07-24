@@ -1,16 +1,28 @@
+import os
 import sys
 import json
 import argparse
-from .helm_upgrade import HelmUpgrade
+from .app import helm_upgrade
+
+HERE = os.path.abspath(os.path.dirname(__file__))
 
 DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."  # noqa: E501
 parser = argparse.ArgumentParser(description=DESCRIPTION)
+subparsers = parser.add_subparsers()
 
-parser.add_argument(
+version_parser = subparsers.add_parser(
+    "version", help="Print the version and exit"
+)  # noqa: E501
+
+run_parser = subparsers.add_parser(
+    "run", help="Update the dependencies of a helm chart"
+)
+
+run_parser.add_argument(
     "chart", type=str, help="Name of the local Helm Chart to be updated."
 )
 
-parser.add_argument(
+run_parser.add_argument(
     "dependencies",
     type=json.loads,
     help="""A dictionary of Helm Chart dependencies and their host repo URLs.
@@ -19,13 +31,13 @@ parser.add_argument(
     """,
 )
 
-parser.add_argument(
+run_parser.add_argument(
     "--dry-run",
     action="store_true",
     help="Perform a dry run of the update. Don't write the changes to a file.",
 )
 
-parser.add_argument(
+run_parser.add_argument(
     "-v", "--verbose", action="store_true", help="Option to turn on logging."
 )
 
@@ -33,8 +45,22 @@ parser.add_argument(
 def main():
     """Main function"""
     args = parser.parse_args(sys.argv[1:])
-    obj = HelmUpgrade(vars(args))
-    obj.helm_upgrade()
+
+    if not vars(args):
+        about = {}
+
+        with open(os.path.join(HERE, "__version__.py")) as f:
+            exec(f.read(), about)
+
+        print(about["__version__"])
+
+    else:
+        helm_upgrade(
+            args.chart,
+            args.dependencies,
+            dry_run=args.dry_run,
+            verbose=args.verbose,  # noqa: E501
+        )
 
 
 if __name__ == "__main__":
