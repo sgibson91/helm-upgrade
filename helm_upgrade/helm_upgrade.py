@@ -181,7 +181,7 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the Helm Chart's Chart.yaml file
         """
-        chart_reqs = json.loads(get_request(url, json=True))
+        chart_reqs = json.load(get_request(url, json=True))
         self.remote_dependencies[name] = chart_reqs["version"]
 
     def pull_version_from_github_pages(self, name, url):
@@ -191,7 +191,7 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the Helm Chart's GitHub Pages host
         """
-        chart_reqs = json.loads(get_request(url, json=True))
+        chart_reqs = json.load(get_request(url, json=True))
         updates_sorted = sorted(
             chart_reqs["entries"][name], key=lambda k: k["created"]
         )  # noqa E501
