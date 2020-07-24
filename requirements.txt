@@ -1,5 +1,5 @@
 bs4
 numpy
-pandas
+pytest
 pyyaml
 requests
