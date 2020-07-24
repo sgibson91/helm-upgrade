@@ -1,7 +1,6 @@
 """Update Helm Chart dependencies."""
 import os
 import yaml
-import json
 import logging
 import requests
 
@@ -24,7 +23,7 @@ def logging_config():
     )
 
 
-def get_request(url, content=False, json=False):
+def get_request(url, content=False, text=False):
     """Send a HTTP GET request to a target URL. Return payload as JSON or html
     content.
 
@@ -32,7 +31,7 @@ def get_request(url, content=False, json=False):
         url (str): The URL to send the request to
         content (bool, optional): Return the payload as HTML content.
                                   Defaults to False.
-        json (bool, optional): Return the payload as JSON content.
+        text (bool, optional): Return the payload as text content.
                                Defaults to False.
     """
     resp = requests.get(url)
@@ -43,8 +42,8 @@ def get_request(url, content=False, json=False):
     if content:
         return resp.content
 
-    if json:
-        return resp.json
+    if text:
+        return resp.text
 
     return resp
 
@@ -181,7 +180,7 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the Helm Chart's Chart.yaml file
         """
-        chart_reqs = json.load(get_request(url, json=True))
+        chart_reqs = yaml.safe_load(get_request(url, text=True))
         self.remote_dependencies[name] = chart_reqs["version"]
 
     def pull_version_from_github_pages(self, name, url):
@@ -191,7 +190,7 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the Helm Chart's GitHub Pages host
         """
-        chart_reqs = json.load(get_request(url, json=True))
+        chart_reqs = yaml.safe_load(get_request(url, text=True))
         updates_sorted = sorted(
             chart_reqs["entries"][name], key=lambda k: k["created"]
         )  # noqa E501
