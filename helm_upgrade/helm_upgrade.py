@@ -134,7 +134,7 @@ class HelmUpgrade:
         if self.verbose:
             logging.info(
                 "Reading local chart dependencies from: %s" % filepath
-            )  # noqa E501
+            )  # noqa: E501
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
@@ -172,7 +172,7 @@ class HelmUpgrade:
                 )
             else:
                 raise Exception(
-                    f"Chart type not recognised: {self.dependencies[dependency]}"  # noqa E501
+                    f"Chart type not recognised: {self.dependencies[dependency]}"  # noqa: E501
                 )
 
     def pull_version_from_chart_file(self, name, url):
@@ -195,7 +195,7 @@ class HelmUpgrade:
         chart_reqs = yaml.safe_load(get_request(url, text=True))
         updates_sorted = sorted(
             chart_reqs["entries"][name], key=lambda k: k["created"]
-        )  # noqa E501
+        )  # noqa: E501
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
 
     def pull_version_from_github_releases(self, name, url):
