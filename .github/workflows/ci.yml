@@ -68,7 +68,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m coverage run pytest -vvv
+          coverage run -m python -m pytest -vvv
 
       - name: Print coverage report
         run: |
