@@ -30,8 +30,10 @@ def get_request(url, content=False, json=False):
 
     Args:
         url (str): The URL to send the request to
-        content (bool, optional): Return the payload as HTML content. Defaults to False.
-        json (bool, optional): Return the payload as JSON content. Defaults to False.
+        content (bool, optional): Return the payload as HTML content.
+                                  Defaults to False.
+        json (bool, optional): Return the payload as JSON content.
+                               Defaults to False.
     """
     resp = requests.get(url)
 
@@ -45,6 +47,7 @@ def get_request(url, content=False, json=False):
         return resp.json
 
     return resp
+
 
 class HelmUpgrade:
     """HelmUpgrade class for interacting with the Helm Chart repos and making
@@ -130,7 +133,7 @@ class HelmUpgrade:
         if self.verbose:
             logging.info(
                 "Reading local chart dependencies from: %s" % filepath
-            )
+            )  # noqa E501
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
@@ -168,7 +171,7 @@ class HelmUpgrade:
                 )
             else:
                 raise Exception(
-                    f"Chart type not recognised: {self.dependencies[dependency]}"
+                    f"Chart type not recognised: {self.dependencies[dependency]}"  # noqa E501
                 )
 
     def pull_version_from_chart_file(self, name, url):
@@ -191,7 +194,7 @@ class HelmUpgrade:
         chart_reqs = json.loads(get_request(url, json=True))
         updates_sorted = sorted(
             chart_reqs["entries"][name], key=lambda k: k["created"]
-        )
+        )  # noqa E501
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
 
     def pull_version_from_github_releases(self, name, url):
