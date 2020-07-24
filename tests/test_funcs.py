@@ -30,8 +30,10 @@ def test_check_chart_versions_no_match():
         "tree": 3,
     }
 
+    result = check_chart_versions(test_current_deps, test_new_deps)
+
     assert len(check_chart_versions(test_current_deps, test_new_deps)) == 1
-    assert check_chart_versions(test_current_deps, test_new_deps) == ["cat"]
+    assert result == ["cat"]
 
 
 @log_capture()
@@ -52,6 +54,31 @@ def test_check_chart_versions_match_verbose(capture):
 
     assert len(result) == 0
     assert result == []
+    capture.check_present()
+
+
+@log_capture()
+def test_check_chart_versions_no_match_verbose(capture):
+    logger = logging.getLogger()
+    logger.info(
+        "New versions are available.\n\t\tcat: 2 --> 5"
+    )
+
+    test_current_deps = {
+        "dog": 1,
+        "cat": 2,
+        "tree": 3,
+    }
+    test_new_deps = {
+        "dog": 1,
+        "cat": 5,
+        "tree": 3,
+    }
+
+    result = check_chart_versions(test_current_deps, test_new_deps, verbose=True)
+
+    assert len(check_chart_versions(test_current_deps, test_new_deps)) == 1
+    assert result == ["cat"]
     capture.check_present()
 
 
