@@ -39,3 +39,14 @@ def test_get_local_chart_versions():
     }
 
     assert get_local_chart_versions(chart_name) == test_deps
+
+
+def test_get_local_chart_versions_broken():
+    chart_name = os.path.join("tests", "test-chart")
+    test_deps = {
+        "dog": 1,
+        "cat": 2,
+        "tree": 3,
+    }
+
+    assert get_local_chart_versions(chart_name) != test_deps
