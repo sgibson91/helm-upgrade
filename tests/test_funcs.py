@@ -1,4 +1,6 @@
 import os
+import logging
+from testfixtures import log_capture
 from helm_upgrade.app import check_chart_versions, get_local_chart_versions
 
 
@@ -10,8 +12,10 @@ def test_check_chart_versions_match():
     }
     test_new_deps = test_current_deps.copy()
 
-    assert len(check_chart_versions(test_current_deps, test_new_deps)) == 0
-    assert check_chart_versions(test_current_deps, test_new_deps) == []
+    result = check_chart_versions(test_current_deps, test_new_deps)
+
+    assert len(result) == 0
+    assert result == []
 
 
 def test_check_chart_versions_no_match():
@@ -28,6 +32,27 @@ def test_check_chart_versions_no_match():
 
     assert len(check_chart_versions(test_current_deps, test_new_deps)) == 1
     assert check_chart_versions(test_current_deps, test_new_deps) == ["cat"]
+
+
+@log_capture()
+def test_check_chart_versions_match_verbose(capture):
+    logger = logging.getLogger()
+    logger.info("All charts are up-to-date!")
+
+    test_current_deps = {
+        "dog": 1,
+        "cat": 2,
+        "tree": 3,
+    }
+    test_new_deps = test_current_deps.copy()
+
+    result = check_chart_versions(
+        test_current_deps, test_new_deps, verbose=True
+    )  # noqa: E501
+
+    assert len(result) == 0
+    assert result == []
+    capture.check_present()
 
 
 def test_get_local_chart_versions():
