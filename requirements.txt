@@ -3,3 +3,4 @@ numpy
 pytest
 pyyaml
 requests
+testfixtures
