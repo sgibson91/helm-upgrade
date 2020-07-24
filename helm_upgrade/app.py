@@ -22,7 +22,7 @@ def logging_config():
     )
 
 
-def get_request(url, content=False, text=False):
+def get_request(url: str, content: bool = False, text: bool = False):
     """Send a HTTP GET request to a target URL. Return payload as JSON or html
     content.
 
@@ -81,8 +81,6 @@ def update_requirements_file(
 
 
 def check_chart_versions(
-    chart_name: str,
-    deps: dict,
     current_deps: dict,
     new_deps: dict,
     verbose: bool = False,
@@ -91,8 +89,6 @@ def check_chart_versions(
     up-to-date with the remote ones.
 
     Args:
-        chart_name (str): Name of the helm chart
-        deps (dict): chart_name's dependencies
         current_deps (dict): The versions the helm chart is currently running
         new_deps (dict): Newer versions of the dependencies
         verbose (bool, optional): Produce verbose output. Defaults to False.
@@ -100,7 +96,7 @@ def check_chart_versions(
     Returns:
         list: A list of the dependencies that need updating
     """
-    charts = list(deps.keys())
+    charts = list(current_deps.keys())
     condition = [(current_deps[chart] != new_deps[chart]) for chart in charts]
 
     if np.any(condition):
@@ -285,7 +281,7 @@ def helm_upgrade(
     remote_deps = get_remote_chart_versions(dependencies, verbose=verbose)
     # Check the chart versions
     charts_to_update = check_chart_versions(
-        chart_name, dependencies, local_deps, remote_deps, verbose=verbose,
+        local_deps, remote_deps, verbose=verbose,
     )
 
     if (len(charts_to_update) > 0) and (not dry_run):
