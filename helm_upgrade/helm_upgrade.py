@@ -1,6 +1,7 @@
 """Update Helm Chart dependencies."""
 import os
 import yaml
+import json
 import logging
 import requests
 
@@ -22,6 +23,28 @@ def logging_config():
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
+
+def get_request(url, content=False, json=False):
+    """Send a HTTP GET request to a target URL. Return payload as JSON or html
+    content.
+
+    Args:
+        url (str): The URL to send the request to
+        content (bool, optional): Return the payload as HTML content. Defaults to False.
+        json (bool, optional): Return the payload as JSON content. Defaults to False.
+    """
+    resp = requests.get(url)
+
+    if not resp:
+        raise Exception(f"Response not returned by URL: {url}")
+
+    if content:
+        return resp.content
+
+    if json:
+        return resp.json
+
+    return resp
 
 class HelmUpgrade:
     """HelmUpgrade class for interacting with the Helm Chart repos and making
@@ -78,6 +101,7 @@ class HelmUpgrade:
                         ]
                     )
                 )
+
                 if self.dry_run:
                     logging.info(
                         "THIS IS A DRY-RUN. NO FILES WILL BE CHANGED."
@@ -86,6 +110,7 @@ class HelmUpgrade:
                     self.update_requirements_file(
                         charts=list(compress(charts, condition))
                     )
+
         else:
             if self.verbose:
                 logging.info("All charts are up-to-date!")
@@ -105,7 +130,7 @@ class HelmUpgrade:
         if self.verbose:
             logging.info(
                 "Reading local chart dependencies from: %s" % filepath
-            )  # noqa: E501
+            )
 
         with open(filepath, "r") as stream:
             chart_deps = yaml.safe_load(stream)
@@ -131,13 +156,19 @@ class HelmUpgrade:
                 self.pull_version_from_chart_file(
                     name=dependency, url=self.dependencies[dependency]
                 )
+
             elif "/gh-pages/" in self.dependencies[dependency]:
                 self.pull_version_from_github_pages(
                     name=dependency, url=self.dependencies[dependency]
                 )
+
             elif self.dependencies[dependency].endswith("/releases/latest"):
                 self.pull_version_from_github_releases(
                     name=dependency, url=self.dependencies[dependency]
+                )
+            else:
+                raise Exception(
+                    f"Chart type not recognised: {self.dependencies[dependency]}"
                 )
 
     def pull_version_from_chart_file(self, name, url):
@@ -147,7 +178,7 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the Helm Chart's Chart.yaml file
         """
-        chart_reqs = yaml.safe_load(requests.get(url).text)
+        chart_reqs = json.loads(get_request(url, json=True))
         self.remote_dependencies[name] = chart_reqs["version"]
 
     def pull_version_from_github_pages(self, name, url):
@@ -157,10 +188,10 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the Helm Chart's GitHub Pages host
         """
-        chart_reqs = yaml.safe_load(requests.get(url).text)
+        chart_reqs = json.loads(get_request(url, json=True))
         updates_sorted = sorted(
             chart_reqs["entries"][name], key=lambda k: k["created"]
-        )  # noqa: E501
+        )
         self.remote_dependencies[name] = updates_sorted[-1]["version"]
 
     def pull_version_from_github_releases(self, name, url):
@@ -170,8 +201,8 @@ class HelmUpgrade:
             name {string} -- The name of the Helm Chart
             url {string} -- The URL of the GitHub Releases page
         """
-        res = requests.get(url)
-        soup = BeautifulSoup(res.content, "html.parser")
+        res = get_request(url, content=True)
+        soup = BeautifulSoup(res, "html.parser")
 
         links = soup.find_all("a", attrs={"title": True})
 
