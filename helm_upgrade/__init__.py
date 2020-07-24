@@ -1,1 +1,1 @@
-from .app import helm_upgrade  # noqa: F401
+from .app import *  # noqa: F401
