@@ -50,23 +50,28 @@ def get_request(url, content=False, text=False):
 
 
 def update_requirements_file(
-    chart_name: str,
-    charts: list,
-    remote_dependencies: dict,
-    verbose: bool = False,  # noqa: E501
+    chart_name: str, deps_to_update: list, deps: dict, verbose: bool = False,
 ):
+    """Update the Helm Chart requirements.yaml file with new dependency versions
+
+    Args:
+        chart_name (str): The name of the helm chart
+        deps_to_update (list): The dependencies to be updated
+        deps (dict): The dependencies and their versions
+        verbose (bool, optional): Produce verbose output. Defaults to False.
+    """
     file_path = os.path.join(HERE, chart_name, "requirements.yaml")
 
     with open(file_path, "r") as stream:
         chart_yaml = yaml.safe_load(stream)
 
-    for chart in charts:
+    for dep in deps_to_update:
         if verbose:
-            logging.info("Updating version for: %s" % chart)
+            logging.info("Updating version for: %s" % dep)
 
         for dependency in chart_yaml["dependencies"]:
-            if dependency["name"] == chart:
-                dependency["version"] = remote_dependencies[chart]
+            if dependency["name"] == dep:
+                dependency["version"] = deps[dep]
 
     with open(file_path, "w") as stream:
         yaml.safe_dump(chart_yaml, stream)
@@ -77,17 +82,26 @@ def update_requirements_file(
 
 def check_chart_versions(
     chart_name: str,
-    dependencies: dict,
-    local_dependencies: dict,
-    remote_dependencies: dict,
-    dry_run: bool = False,
+    deps: dict,
+    current_deps: dict,
+    new_deps: dict,
     verbose: bool = False,
-) -> bool:
-    charts = list(dependencies.keys())
-    condition = [
-        (local_dependencies[chart] != remote_dependencies[chart])
-        for chart in charts  # noqa: E501
-    ]
+) -> list:
+    """Check whether the versions of the charts in the current dependencies are
+    up-to-date with the remote ones.
+
+    Args:
+        chart_name (str): Name of the helm chart
+        deps (dict): chart_name's dependencies
+        current_deps (dict): The versions the helm chart is currently running
+        new_deps (dict): Newer versions of the dependencies
+        verbose (bool, optional): Produce verbose output. Defaults to False.
+
+    Returns:
+        list: A list of the dependencies that need updating
+    """
+    charts = list(deps.keys())
+    condition = [(current_deps[chart] != new_deps[chart]) for chart in charts]
 
     if np.any(condition):
         if verbose:
@@ -96,7 +110,7 @@ def check_chart_versions(
                 + "\n\t\t".join(
                     [
                         (
-                            f"{chart}: {local_dependencies[chart]} --> {remote_dependencies[chart]}"  # noqa: E501
+                            f"{chart}: {current_deps[chart]} --> {new_deps[chart]}"  # noqa: E501
                         )
                         for chart in charts
                     ]
@@ -112,29 +126,53 @@ def check_chart_versions(
 
 
 def pull_version_from_chart_file(
-    remote_dependencies: dict, name: str, url: str
-) -> dict:
-    chart_reqs = yaml.safe_load(get_request(url, text=True))
-    remote_dependencies[name] = chart_reqs["version"]
+    output_dict: dict, dependency: str, url: str
+) -> dict:  # noqa: E501
+    """Pull recent, up-to-date version from remote host stored in a Chart.yml
+    file.
 
-    return remote_dependencies
+    Args:
+        output_dict (dict): The dictionary to store versions in
+        dependency (str): The dependency to get a new version for
+        url (str): The URL of the remotely hosted versions
+    """
+    chart_reqs = yaml.safe_load(get_request(url, text=True))
+    output_dict[dependency] = chart_reqs["version"]
+
+    return output_dict
 
 
 def pull_version_from_github_pages(
-    remote_dependencies: dict, name: str, url: str
+    output_dict: dict, dependency: str, url: str
 ) -> dict:
+    """Pull recent, up-to-date version from remote host listed on a GitHub Pages
+    site.
+
+    Args:
+        output_dict (dict): The dictionary to store versions in
+        dependency (str): The dependency to get a version for
+        url (str): The URL of the remotely hosted versions
+    """
     chart_reqs = yaml.safe_load(get_request(url, text=True))
     updates_sorted = sorted(
-        chart_reqs["entries"][name], key=lambda k: k["created"]
-    )  # noqa: E501
-    remote_dependencies[name] = updates_sorted[-1]["version"]
+        chart_reqs["entries"][dependency], key=lambda k: k["created"]
+    )
+    output_dict[dependency] = updates_sorted[-1]["version"]
 
-    return remote_dependencies
+    return output_dict
 
 
 def pull_version_from_github_releases(
-    remote_dependencies: dict, name: str, url: str
+    output_dict: dict, dependency: str, url: str
 ) -> dict:
+    """Pull recent, up-to-date version from remote host listed on a GitHub
+    Releases site.
+
+    Args:
+        output_dict (dict): The dictionary to store versions in
+        dependency (str): The dependency to get a version for
+        url (str): The URL of the remotely hosted versions
+    """
     res = get_request(url, content=True)
     soup = BeautifulSoup(res, "html.parser")
 
@@ -147,63 +185,68 @@ def pull_version_from_github_releases(
             and ("." in link.span.text)
         ):
 
-            remote_dependencies[name] = link.span.text
+            output_dict[dependency] = link.span.text
 
-    return remote_dependencies
+    return output_dict
 
 
-def get_remote_chart_versions(
-    dependencies: dict, verbose: bool = False
-) -> dict:  # noqa: E501
+def get_remote_chart_versions(deps: dict, verbose: bool = False) -> dict:
+    """Get dependency versions from the remote hosts
+
+    Args:
+        deps (dict): The dependencies to check and their host URLs
+        dependency (str): The dependency to get a version for
+        verbose (bool, optional): Produce verbose output. Defaults to False.
+
+    Returns:
+        dict: The dependencies and the most recent versions from the remote
+              hosts
+    """
     remote_dependencies = {}
 
-    for dependency in dependencies.keys():
+    for dep in deps.keys():
         if verbose:
             logging.info(
                 """Retrieving the most recent version of
                         chart: %s
                         repository: %s"""
-                % (dependency, dependencies[dependency])
+                % (dep, deps[dep])
             )
 
-        if dependencies[dependency].endswith("Chart.yaml"):
+        if deps[dep].endswith("Chart.yaml"):
             remote_dependencies = pull_version_from_chart_file(
-                remote_dependencies,
-                name=dependency,
-                url=dependencies[dependency],  # noqa: E501
+                remote_dependencies, dep, deps[dep],
             )
 
-        elif "/gh-pages/" in dependencies[dependency]:
+        elif "/gh-pages/" in deps[dep]:
             remote_dependencies = pull_version_from_github_pages(
-                remote_dependencies,
-                name=dependency,
-                url=dependencies[dependency],  # noqa: E501
+                remote_dependencies, dep, deps[dep],
             )
 
-        elif dependencies[dependency].endswith("/releases/latest"):
+        elif deps[dep].endswith("/releases/latest"):
             remote_dependencies = pull_version_from_github_releases(
-                remote_dependencies,
-                name=dependency,
-                url=dependencies[dependency],  # noqa: E501
+                remote_dependencies, dep, deps[dep],
             )
 
         else:
-            raise Exception(
-                f"Chart type not recognised: {dependencies[dependency]}"  # noqa: E501
-            )
+            raise Exception(f"Chart type not recognised: {deps[dep]}")
 
     return remote_dependencies
 
 
 def get_local_chart_versions(chart_name: str, verbose: bool = False) -> dict:
+    """The dependency versions currently being installed by the helm chart
+
+    Args:
+        chart_name (str): The name of the local helm chart
+        verbose (bool, optional): Produce verbose output. Defaults to False.
+    """
     local_dependencies = {}
 
     filepath = os.path.join(HERE, chart_name, "requirements.yaml")
 
     if verbose:
-        logging.info(
-            "Reading local chart dependencies from: %s" % filepath
-        )  # noqa: E501
+        logging.info("Reading local chart dependencies from: %s" % filepath)
 
     with open(filepath, "r") as stream:
         chart_deps = yaml.safe_load(stream)
@@ -220,6 +263,15 @@ def helm_upgrade(
     dry_run: bool = False,
     verbose: bool = False,  # noqa: E501
 ):
+    """Upgrade a local helm chart's requirements.yaml to have up-to-date
+    versions of its dependencies.
+
+    Args:
+        chart_name (str): The name of the helm chart
+        dependencies (dict): A list of dependencies to check and host URLs
+        dry_run (bool, optional): Don't change any files. Defaults to False.
+        verbose (bool, optional): Produce verbose output. Defaults to False.
+    """
     # Turn on logging
     if verbose:
         logging_config()
@@ -233,12 +285,7 @@ def helm_upgrade(
     remote_deps = get_remote_chart_versions(dependencies, verbose=verbose)
     # Check the chart versions
     charts_to_update = check_chart_versions(
-        chart_name,
-        dependencies,
-        local_deps,
-        remote_deps,
-        dry_run=dry_run,
-        verbose=verbose,
+        chart_name, dependencies, local_deps, remote_deps, verbose=verbose,
     )
 
     if (len(charts_to_update) > 0) and (not dry_run):
