@@ -9,10 +9,18 @@ on:
       - main
 
 jobs:
-  standard:
+  run-test-chart:
     runs-on: ubuntu-latest
-    steps:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - args: ""
+          - args: "--verbose"
+          - args: "--dry-run"
+          - args: "--verbose --dry-run"
 
+    steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
@@ -32,77 +40,7 @@ jobs:
 
       - name: Run helm-upgrade test-chart standard
         working-directory: ./tests
+        env:
+          params: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
         run: |
-          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
-
-  verbose:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install helm-upgrade package
-        run: |
-          pip install .
-
-      - name: Run helm-upgrade test-chart verbose
-        working-directory: ./tests
-        run: |
-          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --verbose
-
-  dry-run:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-      - name: Install helm-upgrade package
-        run: |
-          python setup.py install
-      - name: Run helm-upgrade test-chart dry-run
-        working-directory: ./tests
-        run: |
-          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run
-
-  verbose-dry-run:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install helm-upgrade package
-        run: |
-          pip install .
-
-      - name: Run helm-upgrade test-chart verbose dry-run
-        working-directory: ./tests
-        run: |
-          helm-upgrade test-chart '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}' --dry-run --verbose
+          helm-upgrade test-chart ${{ env.params }} ${{ matrix.args }}
