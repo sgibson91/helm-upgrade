@@ -38,7 +38,7 @@ jobs:
         run: |
           pip install .
 
-      - name: Run helm-upgrade test-chart standard
+      - name: Run helm-upgrade
         working-directory: ./tests
         env:
           params: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
