@@ -81,9 +81,7 @@ def update_requirements_file(
 
 
 def check_chart_versions(
-    current_deps: dict,
-    new_deps: dict,
-    verbose: bool = False,
+    current_deps: dict, new_deps: dict, verbose: bool = False,
 ) -> list:
     """Check whether the versions of the charts in the current dependencies are
     up-to-date with the remote ones.
@@ -281,8 +279,8 @@ def helm_upgrade(
     remote_deps = get_remote_chart_versions(dependencies, verbose=verbose)
     # Check the chart versions
     charts_to_update = check_chart_versions(
-        local_deps, remote_deps, verbose=verbose,
-    )
+        local_deps, remote_deps, verbose=verbose
+    )  # noqa: E501
 
     if (len(charts_to_update) > 0) and (not dry_run):
         update_requirements_file(
