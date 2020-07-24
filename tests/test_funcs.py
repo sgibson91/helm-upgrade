@@ -5,6 +5,7 @@ from helm_upgrade.app import check_chart_versions, get_local_chart_versions
 
 HERE = os.getcwd()
 
+
 def test_check_chart_versions_match():
     test_current_deps = {
         "dog": 1,
@@ -61,9 +62,7 @@ def test_check_chart_versions_match_verbose(capture):
 @log_capture()
 def test_check_chart_versions_no_match_verbose(capture):
     logger = logging.getLogger()
-    logger.info(
-        "New versions are available.\n\t\tcat: 2 --> 5"
-    )
+    logger.info("New versions are available.\n\t\tcat: 2 --> 5")
 
     test_current_deps = {
         "dog": 1,
@@ -76,7 +75,9 @@ def test_check_chart_versions_no_match_verbose(capture):
         "tree": 3,
     }
 
-    result = check_chart_versions(test_current_deps, test_new_deps, verbose=True)
+    result = check_chart_versions(
+        test_current_deps, test_new_deps, verbose=True
+    )  # noqa: E501
 
     assert len(check_chart_versions(test_current_deps, test_new_deps)) == 1
     assert result == ["cat"]
@@ -122,4 +123,24 @@ def test_get_local_chart_versions_verbose(capture):
     result = get_local_chart_versions(chart_name, verbose=True)
 
     assert result == test_deps
+    capture.check_present()
+
+
+@log_capture()
+def test_get_local_chart_versions_broken_verbose(capture):
+    chart_name = os.path.join("tests", "test-chart")
+    filepath = os.path.join(HERE, chart_name, "requirements.yaml")
+
+    logger = logging.getLogger()
+    logger.info("Reading local chart dependencies from: %s" % filepath)
+
+    test_deps = {
+        "dog": 1,
+        "cat": 2,
+        "tree": 3,
+    }
+
+    result = get_local_chart_versions(chart_name, verbose=True)
+
+    assert result != test_deps
     capture.check_present()
