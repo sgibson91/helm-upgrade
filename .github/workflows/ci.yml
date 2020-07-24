@@ -1,0 +1,46 @@
+name: CI-test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-test-chart:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - args: ""
+          - args: "--verbose"
+          - args: "--dry-run"
+          - args: "--verbose --dry-run"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install helm-upgrade package
+        run: |
+          pip install .
+
+      - name: Run helm-upgrade test-chart standard
+        working-directory: ./tests
+        env:
+          params: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
+        run: |
+          helm-upgrade test-chart '${{ env.params }}' ${{ matrix.args }}
