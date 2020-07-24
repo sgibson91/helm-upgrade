@@ -34,6 +34,9 @@ def get_request(url, content=False, text=False):
         text (bool, optional): Return the payload as text content.
                                Defaults to False.
     """
+    if content and text:
+        raise Exception("Cannot return both HTML and text content.")
+
     resp = requests.get(url)
 
     if not resp:
@@ -41,11 +44,10 @@ def get_request(url, content=False, text=False):
 
     if content:
         return resp.content
-
-    if text:
+    elif text:
         return resp.text
-
-    return resp
+    else:
+        return resp
 
 
 class HelmUpgrade:
