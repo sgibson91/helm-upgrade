@@ -47,19 +47,15 @@ jobs:
 
   run-test-suite:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        python_version: [3.7, 3.8]
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python_version }}
+      - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python_version }}
+          python-version: 3.7
 
       - name: Install dependencies
         run: |
