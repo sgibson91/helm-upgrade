@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from itertools import compress
 
 HERE = os.getcwd()
-ABSOLUTE_HERE = os.path.dirname(os.getcwd())
 
 
 def logging_config():
@@ -22,31 +21,18 @@ def logging_config():
     )
 
 
-def get_request(url: str, content: bool = False, text: bool = False):
-    """Send a HTTP GET request to a target URL. Return payload as JSON or html
-    content.
+def get_request(url: str):
+    """Send a HTTP GET request to a target URL. Return payload as JSON.
 
     Args:
         url (str): The URL to send the request to
-        content (bool, optional): Return the payload as HTML content.
-                                  Defaults to False.
-        text (bool, optional): Return the payload as text content.
-                               Defaults to False.
     """
-    if content and text:
-        raise Exception("Cannot return both HTML and text content.")
-
     resp = requests.get(url)
 
     if not resp:
         raise Exception(f"Response not returned by URL: {url}")
 
-    if content:
-        return resp.content
-    elif text:
-        return resp.text
-    else:
-        return resp
+    return resp.text
 
 
 def update_requirements_file(
@@ -130,7 +116,7 @@ def pull_version_from_chart_file(
         dependency (str): The dependency to get a new version for
         url (str): The URL of the remotely hosted versions
     """
-    chart_reqs = yaml.safe_load(get_request(url, text=True))
+    chart_reqs = yaml.safe_load(get_request(url))
     output_dict[dependency] = chart_reqs["version"]
 
     return output_dict
@@ -147,7 +133,7 @@ def pull_version_from_github_pages(
         dependency (str): The dependency to get a version for
         url (str): The URL of the remotely hosted versions
     """
-    chart_reqs = yaml.safe_load(get_request(url, text=True))
+    chart_reqs = yaml.safe_load(get_request(url))
     updates_sorted = sorted(
         chart_reqs["entries"][dependency], key=lambda k: k["created"]
     )
@@ -167,7 +153,7 @@ def pull_version_from_github_releases(
         dependency (str): The dependency to get a version for
         url (str): The URL of the remotely hosted versions
     """
-    res = get_request(url, content=True)
+    res = get_request(url)
     soup = BeautifulSoup(res, "html.parser")
 
     links = soup.find_all("a", attrs={"title": True})
