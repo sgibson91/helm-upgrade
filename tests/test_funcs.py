@@ -1,7 +1,10 @@
 import os
 import logging
+import responses
 from testfixtures import log_capture
 from helm_upgrade.app import check_chart_versions, get_local_chart_versions
+from helm_upgrade.app import pull_version_from_chart_file
+from helm_upgrade.app import pull_version_from_github_pages
 
 HERE = os.getcwd()
 
@@ -144,3 +147,26 @@ def test_get_local_chart_versions_broken_verbose(capture):
 
     assert result != test_deps
     capture.check_present()
+
+
+@responses.activate
+def test_pull_version_from_chart_file():
+    test_dict = {}
+    test_dep = "dependency"
+    test_url = "http://jsonplaceholder.typicode.com/Chart.yaml"
+
+    responses.add(
+        responses.GET,
+        test_url,
+        json={"version": "1.2.3"},
+        status=200,
+    )
+
+    test_dict = pull_version_from_chart_file(test_dict, test_dep, test_url)
+
+    assert len(test_dict) == 1
+    assert list(test_dict.items()) == [(test_dep, "1.2.3")]
+
+    assert len(responses.calls) == 1
+    assert responses.calls[0].request.url == test_url
+    assert responses.calls[0].response.text == '{"version": "1.2.3"}'
