@@ -2,7 +2,10 @@ import os
 import logging
 import responses
 from testfixtures import log_capture
-from helm_upgrade.app import check_chart_versions, get_local_chart_versions
+from unittest.mock import patch
+from helm_upgrade.app import check_chart_versions
+from helm_upgrade.app import get_local_chart_versions
+from helm_upgrade.app import get_remote_chart_versions
 from helm_upgrade.app import pull_version_from_chart_file
 from helm_upgrade.app import pull_version_from_github_pages
 from helm_upgrade.app import pull_version_from_github_releases
@@ -236,3 +239,41 @@ def test_pull_version_from_github_releases():
         responses.calls[0].response.text
         == f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>'  # noqa: E501
     )
+
+
+@patch(
+    "helm_upgrade.app.pull_version_from_chart_file",
+    return_value={"nginx-ingress": "1.2.3"},
+)
+def test_get_remote_chart_versions_from_chart(mocked_func):
+    test_deps = {
+        "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"  # noqa: E501
+    }
+    test_result = get_remote_chart_versions(test_deps)
+
+    assert test_result == {"nginx-ingress": "1.2.3"}
+    assert mocked_func.call_count == 1
+
+
+@patch(
+    "helm_upgrade.app.pull_version_from_chart_file",
+    return_value={"nginx-ingress": "1.2.3"},
+)
+@log_capture
+def test_get_remote_chart_versions_from_chart_verbose(mocked_func, capture):
+    test_deps = {
+        "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"  # noqa: E501
+    }
+
+    logger = logging.getLogger()
+    logger.info(
+        """Retrieving the most recent version of
+                chart: nginx-ingress
+                repository: https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"""  # noqa: E501
+    )
+
+    test_result = get_remote_chart_versions(test_deps, verbose=True)
+
+    assert test_result == {"nginx-ingress": "1.2.3"}
+    assert mocked_func.call_count == 1
+    capture.check_present()
