@@ -317,3 +317,43 @@ def test_get_remote_chart_versions_from_github_pages_verbose(
     assert test_result == {"binderhub": "1.2.3"}
     assert mocked_func.call_count == 1
     capture.check_present()
+
+
+@patch(
+    "helm_upgrade.app.pull_version_from_github_releases",
+    return_value={"cert-manager": "v1.2.3"},
+)
+def test_get_remote_chart_versions_from_github_releases(mocked_func):
+    test_deps = {
+        "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"  # noqa: E501
+    }
+    test_result = get_remote_chart_versions(test_deps)
+
+    assert test_result == {"cert-manager": "v1.2.3"}
+    assert mocked_func.call_count == 1
+
+
+@patch(
+    "helm_upgrade.app.pull_version_from_github_releases",
+    return_value={"cert-manager": "v1.2.3"},
+)
+@log_capture
+def test_get_remote_chart_versions_from_github_releases_verbose(
+    mocked_func, capture
+):  # noqa: E501
+    test_deps = {
+        "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"  # noqa: E501
+    }
+
+    logger = logging.getLogger()
+    logger.info(
+        """Retrieving the most recent version of
+                chart: cert-manager
+                repository: https://github.com/jetstack/cert-manager/releases/latest"""  # noqa: E501
+    )
+
+    test_result = get_remote_chart_versions(test_deps, verbose=True)
+
+    assert test_result == {"cert-manager": "v1.2.3"}
+    assert mocked_func.call_count == 1
+    capture.check_present()
