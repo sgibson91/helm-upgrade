@@ -1,22 +1,31 @@
-from unittest.mock import Mock, patch
+import pytest
+import responses
 from helm_upgrade.app import get_request
 
 
-@patch("helm_upgrade.app.requests.get")
-def test_get_request(mock_get):
-    test_url = "http://jsonplaceholder.typicode.com"
-    mock_get.return_value = Mock(ok=True, text='{"test-1": 1, "test-2": 2}')
+@responses.activate
+def test_get_request():
+    test_url = "http://jsonplaceholder.typicode.com/"
+
+    responses.add(
+        responses.GET,
+        test_url,
+        json={"key1": "value1"},
+        status=200,
+    )
+
     resp = get_request(test_url)
 
-    assert resp.ok
-    assert resp.text == '{"test-1": 1, "test-2": 2}'
+    assert len(responses.calls) == 1
+    assert responses.calls[0].request.url == test_url
+    assert responses.calls[0].response.text == '{"key1": "value1"}'
+
+    assert resp == '{"key1": "value1"}'
 
 
-@patch("helm_upgrade.app.requests.get")
-def test_get_request_broken(mock_get):
-    test_url = "http://josnplaceholder.typicode.com"
-    mock_get.return_value = Mock(ok=False, text=None)
-    resp = get_request(test_url)
+@responses.activate
+def test_get_request_broken():
+    test_url = "http://jsonplaceholder.typicode.com/"
 
-    assert not resp.ok
-    assert resp.text is None
+    with pytest.raises(Exception):
+        get_request(test_url)
