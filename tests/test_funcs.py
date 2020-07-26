@@ -5,6 +5,7 @@ from testfixtures import log_capture
 from helm_upgrade.app import check_chart_versions, get_local_chart_versions
 from helm_upgrade.app import pull_version_from_chart_file
 from helm_upgrade.app import pull_version_from_github_pages
+from helm_upgrade.app import pull_version_from_github_releases
 
 HERE = os.getcwd()
 
@@ -205,4 +206,33 @@ def test_pull_version_from_github_pages():
     assert (
         responses.calls[0].response.text
         == '{"entries": {"dependency": [{"created": "2020-07-26T15:33:00.0000000Z", "version": "1.2.3"}, {"created": "2020-07-25T15:33:00.0000000Z", "version": "1.2.2"}]}}'  # noqa: E501
+    )
+
+
+@responses.activate
+def test_pull_version_from_github_releases():
+    test_dict = {}
+    test_dep = "dependency"
+    test_url = "http://jsonplaceholder.typicode.com/releases/latest/"
+
+    desired_version = "v1.2.3"
+    responses.add(
+        responses.GET,
+        test_url,
+        body=f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>',  # noqa: E501
+        status=200,
+    )
+
+    test_dict = pull_version_from_github_releases(
+        test_dict, test_dep, test_url
+    )  # noqa: E501
+
+    assert len(test_dict) == 1
+    assert list(test_dict.items()) == [(test_dep, "v1.2.3")]
+
+    assert len(responses.calls) == 1
+    assert responses.calls[0].request.url == test_url
+    assert (
+        responses.calls[0].response.text
+        == f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>'  # noqa: E501
     )
