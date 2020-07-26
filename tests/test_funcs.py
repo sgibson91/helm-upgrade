@@ -420,7 +420,9 @@ def test_update_requirements_file_verbose(capture):
     with open(filepath, "r") as stream:
         deps_before = yaml.safe_load(stream)
 
-    update_requirements_file(chart_name, deps_to_update, deps_dict)
+    update_requirements_file(
+        chart_name, deps_to_update, deps_dict, verbose=True
+    )  # noqa: E501
 
     # Read in edited deps
     with open(filepath, "r") as stream:
