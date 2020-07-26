@@ -345,13 +345,7 @@ def test_get_remote_chart_versions_from_github_releases(mocked_func):
 
 
 @log_capture()
-# @patch(
-#     "helm_upgrade.app.pull_version_from_github_releases",
-#     return_value={"cert-manager": "v1.2.3"},
-# )
-def test_get_remote_chart_versions_from_github_releases_verbose(
-    capture  # , mocked_func
-):  # noqa: E501
+def test_get_remote_chart_versions_from_github_releases_verbose(capture):
     test_deps = {
         "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"  # noqa: E501
     }
