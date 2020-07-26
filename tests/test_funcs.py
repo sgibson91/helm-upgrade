@@ -21,7 +21,7 @@ def checkout_file(filepath):
     check_call(["git", "checkout", "--", filepath])
 
 
-#=== Tests ===#
+# === Tests === #
 
 
 def test_check_chart_versions_match():
@@ -377,7 +377,7 @@ def test_update_requirements_file():
     deps_dict = {
         "binderhub": "1.2.3",
         "cert-manager": "v1.2.3",
-        "nginx-ingress": "1.2.3"
+        "nginx-ingress": "1.2.3",
     }
 
     checkout_file(filepath)
@@ -403,7 +403,7 @@ def test_update_requirements_file_verbose(capture):
     deps_dict = {
         "binderhub": "1.2.3",
         "cert-manager": "v1.2.3",
-        "nginx-ingress": "1.2.3"
+        "nginx-ingress": "1.2.3",
     }
 
     checkout_file(filepath)
@@ -411,7 +411,10 @@ def test_update_requirements_file_verbose(capture):
     logger = logging.getLogger()
     for dep in deps_to_update:
         logger.info("Updating version for: %s" % dep)
-    logger.info("Updated requirements in: %s" % os.path.join(HERE, chart_name, "requirements.yaml"))
+    logger.info(
+        "Updated requirements in: %s"
+        % os.path.join(HERE, chart_name, "requirements.yaml")
+    )
 
     # Read in current deps
     with open(filepath, "r") as stream:
