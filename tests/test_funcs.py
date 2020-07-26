@@ -277,3 +277,43 @@ def test_get_remote_chart_versions_from_chart_verbose(mocked_func, capture):
     assert test_result == {"nginx-ingress": "1.2.3"}
     assert mocked_func.call_count == 1
     capture.check_present()
+
+
+@patch(
+    "helm_upgrade.app.pull_version_from_github_pages",
+    return_value={"binderhub": "1.2.3"},
+)
+def test_get_remote_chart_versions_from_github_pages(mocked_func):
+    test_deps = {
+        "binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"  # noqa: E501
+    }
+    test_result = get_remote_chart_versions(test_deps)
+
+    assert test_result == {"binderhub": "1.2.3"}
+    assert mocked_func.call_count == 1
+
+
+@patch(
+    "helm_upgrade.app.pull_version_from_github_pages",
+    return_value={"binderhub": "1.2.3"},
+)
+@log_capture
+def test_get_remote_chart_versions_from_github_pages_verbose(
+    mocked_func, capture
+):  # noqa: E501
+    test_deps = {
+        "binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"  # noqa: E501
+    }
+
+    logger = logging.getLogger()
+    logger.info(
+        """Retrieving the most recent version of
+                chart: binderhub
+                repository: https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"""  # noqa: E501
+    )
+
+    test_result = get_remote_chart_versions(test_deps, verbose=True)
+
+    assert test_result == {"binderhub": "1.2.3"}
+    assert mocked_func.call_count == 1
+    capture.check_present()
