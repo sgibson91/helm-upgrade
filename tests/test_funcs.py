@@ -1,16 +1,27 @@
 import os
+import yaml
 import logging
 import responses
-from testfixtures import log_capture
 from unittest.mock import patch
+from subprocess import check_call
+from testfixtures import log_capture
 from helm_upgrade.app import check_chart_versions
 from helm_upgrade.app import get_local_chart_versions
 from helm_upgrade.app import get_remote_chart_versions
 from helm_upgrade.app import pull_version_from_chart_file
 from helm_upgrade.app import pull_version_from_github_pages
 from helm_upgrade.app import pull_version_from_github_releases
+from helm_upgrade.app import update_requirements_file
 
 HERE = os.getcwd()
+
+
+# Helper function: Not a test!
+def checkout_file(filepath):
+    check_call(["git", "checkout", "--", filepath])
+
+
+#=== Tests ===#
 
 
 def test_check_chart_versions_match():
@@ -356,4 +367,61 @@ def test_get_remote_chart_versions_from_github_releases_verbose(
 
     assert test_result == {"cert-manager": "v1.2.3"}
     assert mocked_func.call_count == 1
+    capture.check_present()
+
+
+def test_update_requirements_file():
+    chart_name = os.path.join("tests", "test-chart")
+    filepath = os.path.join(HERE, chart_name, "requirements.yaml")
+    deps_to_update = ["binderhub", "cert-manager", "nginx-ingress"]
+    deps_dict = {
+        "binderhub": "1.2.3",
+        "cert-manager": "v1.2.3",
+        "nginx-ingress": "1.2.3"
+    }
+
+    checkout_file(filepath)
+
+    # Read in current deps
+    with open(filepath, "r") as stream:
+        deps_before = yaml.safe_load(stream)
+
+    update_requirements_file(chart_name, deps_to_update, deps_dict)
+
+    # Read in edited deps
+    with open(filepath, "r") as stream:
+        deps_after = yaml.safe_load(stream)
+
+    assert deps_before != deps_after
+
+
+@log_capture()
+def test_update_requirements_file_verbose(capture):
+    chart_name = os.path.join("tests", "test-chart")
+    filepath = os.path.join(HERE, chart_name, "requirements.yaml")
+    deps_to_update = ["binderhub", "cert-manager", "nginx-ingress"]
+    deps_dict = {
+        "binderhub": "1.2.3",
+        "cert-manager": "v1.2.3",
+        "nginx-ingress": "1.2.3"
+    }
+
+    checkout_file(filepath)
+
+    logger = logging.getLogger()
+    for dep in deps_to_update:
+        logger.info("Updating version for: %s" % dep)
+    logger.info("Updated requirements in: %s" % os.path.join(HERE, chart_name, "requirements.yaml"))
+
+    # Read in current deps
+    with open(filepath, "r") as stream:
+        deps_before = yaml.safe_load(stream)
+
+    update_requirements_file(chart_name, deps_to_update, deps_dict)
+
+    # Read in edited deps
+    with open(filepath, "r") as stream:
+        deps_after = yaml.safe_load(stream)
+
+    assert deps_before != deps_after
     capture.check_present()
