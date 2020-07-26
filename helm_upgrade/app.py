@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from itertools import compress
 
 HERE = os.getcwd()
-ABSOLUTE_HERE = os.path.dirname(os.getcwd())
 
 
 def logging_config():
@@ -22,31 +21,18 @@ def logging_config():
     )
 
 
-def get_request(url, content=False, text=False):
-    """Send a HTTP GET request to a target URL. Return payload as JSON or html
-    content.
+def get_request(url: str):
+    """Send a HTTP GET request to a target URL. Return payload as JSON.
 
     Args:
         url (str): The URL to send the request to
-        content (bool, optional): Return the payload as HTML content.
-                                  Defaults to False.
-        text (bool, optional): Return the payload as text content.
-                               Defaults to False.
     """
-    if content and text:
-        raise Exception("Cannot return both HTML and text content.")
-
     resp = requests.get(url)
 
     if not resp:
         raise Exception(f"Response not returned by URL: {url}")
 
-    if content:
-        return resp.content
-    elif text:
-        return resp.text
-    else:
-        return resp
+    return resp.text
 
 
 def update_requirements_file(
@@ -81,18 +67,12 @@ def update_requirements_file(
 
 
 def check_chart_versions(
-    chart_name: str,
-    deps: dict,
-    current_deps: dict,
-    new_deps: dict,
-    verbose: bool = False,
+    current_deps: dict, new_deps: dict, verbose: bool = False,
 ) -> list:
     """Check whether the versions of the charts in the current dependencies are
     up-to-date with the remote ones.
 
     Args:
-        chart_name (str): Name of the helm chart
-        deps (dict): chart_name's dependencies
         current_deps (dict): The versions the helm chart is currently running
         new_deps (dict): Newer versions of the dependencies
         verbose (bool, optional): Produce verbose output. Defaults to False.
@@ -100,7 +80,7 @@ def check_chart_versions(
     Returns:
         list: A list of the dependencies that need updating
     """
-    charts = list(deps.keys())
+    charts = list(current_deps.keys())
     condition = [(current_deps[chart] != new_deps[chart]) for chart in charts]
 
     if np.any(condition):
@@ -136,7 +116,7 @@ def pull_version_from_chart_file(
         dependency (str): The dependency to get a new version for
         url (str): The URL of the remotely hosted versions
     """
-    chart_reqs = yaml.safe_load(get_request(url, text=True))
+    chart_reqs = yaml.safe_load(get_request(url))
     output_dict[dependency] = chart_reqs["version"]
 
     return output_dict
@@ -153,7 +133,7 @@ def pull_version_from_github_pages(
         dependency (str): The dependency to get a version for
         url (str): The URL of the remotely hosted versions
     """
-    chart_reqs = yaml.safe_load(get_request(url, text=True))
+    chart_reqs = yaml.safe_load(get_request(url))
     updates_sorted = sorted(
         chart_reqs["entries"][dependency], key=lambda k: k["created"]
     )
@@ -173,7 +153,7 @@ def pull_version_from_github_releases(
         dependency (str): The dependency to get a version for
         url (str): The URL of the remotely hosted versions
     """
-    res = get_request(url, content=True)
+    res = get_request(url)
     soup = BeautifulSoup(res, "html.parser")
 
     links = soup.find_all("a", attrs={"title": True})
@@ -285,8 +265,8 @@ def helm_upgrade(
     remote_deps = get_remote_chart_versions(dependencies, verbose=verbose)
     # Check the chart versions
     charts_to_update = check_chart_versions(
-        chart_name, dependencies, local_deps, remote_deps, verbose=verbose,
-    )
+        local_deps, remote_deps, verbose=verbose
+    )  # noqa: E501
 
     if (len(charts_to_update) > 0) and (not dry_run):
         update_requirements_file(

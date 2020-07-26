@@ -1,0 +1,6 @@
+[run]
+omit =
+    # omit all tests
+    tests/*
+    # omit this single file
+    helm_upgrade/__init__.py

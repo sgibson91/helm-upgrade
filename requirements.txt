@@ -1,5 +1,7 @@
 bs4
 numpy
-pandas
+pytest
 pyyaml
+responses
 requests
+testfixtures
