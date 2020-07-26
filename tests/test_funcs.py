@@ -266,12 +266,8 @@ def test_get_remote_chart_versions_from_chart(mocked_func):
     assert mocked_func.call_count == 1
 
 
-@patch(
-    "helm_upgrade.app.pull_version_from_chart_file",
-    return_value={"nginx-ingress": "1.2.3"},
-)
-@log_capture
-def test_get_remote_chart_versions_from_chart_verbose(mocked_func, capture):
+@log_capture()
+def test_get_remote_chart_versions_from_chart_verbose(capture):
     test_deps = {
         "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"  # noqa: E501
     }
@@ -283,11 +279,16 @@ def test_get_remote_chart_versions_from_chart_verbose(mocked_func, capture):
                 repository: https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"""  # noqa: E501
     )
 
-    test_result = get_remote_chart_versions(test_deps, verbose=True)
+    with patch(
+        "helm_upgrade.app.pull_version_from_chart_file",
+        return_value={"nginx-ingress": "1.2.3"},
+    ) as mocked_func:
 
-    assert test_result == {"nginx-ingress": "1.2.3"}
-    assert mocked_func.call_count == 1
-    capture.check_present()
+        test_result = get_remote_chart_versions(test_deps, verbose=True)
+
+        assert test_result == {"nginx-ingress": "1.2.3"}
+        assert mocked_func.call_count == 1
+        capture.check_present()
 
 
 @patch(
@@ -304,14 +305,8 @@ def test_get_remote_chart_versions_from_github_pages(mocked_func):
     assert mocked_func.call_count == 1
 
 
-@patch(
-    "helm_upgrade.app.pull_version_from_github_pages",
-    return_value={"binderhub": "1.2.3"},
-)
-@log_capture
-def test_get_remote_chart_versions_from_github_pages_verbose(
-    mocked_func, capture
-):  # noqa: E501
+@log_capture()
+def test_get_remote_chart_versions_from_github_pages_verbose(capture):
     test_deps = {
         "binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"  # noqa: E501
     }
@@ -323,11 +318,16 @@ def test_get_remote_chart_versions_from_github_pages_verbose(
                 repository: https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"""  # noqa: E501
     )
 
-    test_result = get_remote_chart_versions(test_deps, verbose=True)
+    with patch(
+        "helm_upgrade.app.pull_version_from_github_pages",
+        return_value={"binderhub": "1.2.3"},
+    ) as mocked_func:
 
-    assert test_result == {"binderhub": "1.2.3"}
-    assert mocked_func.call_count == 1
-    capture.check_present()
+        test_result = get_remote_chart_versions(test_deps, verbose=True)
+
+        assert test_result == {"binderhub": "1.2.3"}
+        assert mocked_func.call_count == 1
+        capture.check_present()
 
 
 @patch(
@@ -344,13 +344,13 @@ def test_get_remote_chart_versions_from_github_releases(mocked_func):
     assert mocked_func.call_count == 1
 
 
-@patch(
-    "helm_upgrade.app.pull_version_from_github_releases",
-    return_value={"cert-manager": "v1.2.3"},
-)
-@log_capture
+@log_capture()
+# @patch(
+#     "helm_upgrade.app.pull_version_from_github_releases",
+#     return_value={"cert-manager": "v1.2.3"},
+# )
 def test_get_remote_chart_versions_from_github_releases_verbose(
-    mocked_func, capture
+    capture  # , mocked_func
 ):  # noqa: E501
     test_deps = {
         "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"  # noqa: E501
@@ -363,11 +363,16 @@ def test_get_remote_chart_versions_from_github_releases_verbose(
                 repository: https://github.com/jetstack/cert-manager/releases/latest"""  # noqa: E501
     )
 
-    test_result = get_remote_chart_versions(test_deps, verbose=True)
+    with patch(
+        "helm_upgrade.app.pull_version_from_github_releases",
+        return_value={"cert-manager": "v1.2.3"},
+    ) as mocked_func:
 
-    assert test_result == {"cert-manager": "v1.2.3"}
-    assert mocked_func.call_count == 1
-    capture.check_present()
+        test_result = get_remote_chart_versions(test_deps, verbose=True)
+
+        assert test_result == {"cert-manager": "v1.2.3"}
+        assert mocked_func.call_count == 1
+        capture.check_present()
 
 
 def test_update_requirements_file():
