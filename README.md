@@ -7,6 +7,7 @@
 | CI Tests | [![CI-test](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ACI-test+branch%3Amain) |
 | Black | [![Black](https://github.com/sgibson91/helm-upgrade/workflows/Black/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ABlack+branch%3Amain) |
 | Flake8 | [![Flake8](https://github.com/sgibson91/helm-upgrade/workflows/Flake8/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3AFlake8+branch%3Amain) |
+| Coverage | ![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sgibson91/helm-upgrade/main/coverage_badge.json) |
 
 Do you manage a Helm Chart that has dependencies on other Helm Charts?
 Are you fed up of manually updating these dependencies?
@@ -22,6 +23,7 @@ This tool was inspired by [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub
   - [:wrench: Manual](#wrench-manual)
 - [:recycle: Usage](#recycle-usage)
   - [:wheel_of_dharma: Remote Helm Charts](#wheel_of_dharma-remote-helm-charts)
+- [:white_check_mark: Running Tests](#white_check_mark-running-tests)
 - [:sparkles: Contributing](#sparkles-contributing)
 
 ---
@@ -140,6 +142,30 @@ The `--verbose` flag will print logs to the console and the `--dry-run` flag wil
    These URLs end with "`/releases/latest`" and uses `BeautifulSoup` to search the html.
 
    For example, <https://github.com/jetstack/cert-manager/releases/latest>
+
+## :white_check_mark: Running Tests
+
+To run the test suite, you must first following the [manual installation instructions](#wrench-manual).
+Once completed, the test suite can be run as follows:
+
+```bash
+python -m pytest -vvv
+```
+
+To see code coverage of the test suite, run the following:
+
+```bash
+python -m coverage run -m pytest -vvv
+coverage report
+```
+
+An interactive HTML version of the report can be accessed by running the following:
+
+```bash
+coverage html
+```
+
+And then opening the `htmlcov/index.html` file in a browser window.
 
 ## :sparkles: Contributing
 
