@@ -23,3 +23,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Download htmlcov artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: htmlcov
+          path: htmlcov
