@@ -1,6 +1,6 @@
 {
-    "schemaVersion": 1,
+    "color": "green",
     "label": "coverage.py",
-    "message": "0%",
-    "color": "red"
-  }
+    "message": "83%",
+    "schemaVersion": 1
+}
