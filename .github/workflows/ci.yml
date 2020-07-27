@@ -74,6 +74,8 @@ jobs:
         run: |
           coverage report && coverage html
 
-      - name: Run script to update coverage badge
-        run: |
-          python update_coverage_badge.py
+      - name: Upload htmlcov dir as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: htmlcov
+          path: htmlcov/
