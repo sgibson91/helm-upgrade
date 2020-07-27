@@ -1,0 +1,25 @@
+name: Update Coverage Status Badge
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for CI tests to succeed
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-tests
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: run-test-suite
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Checkout repo
+        if: steps.wait-for-tests.outputs.conclusion == 'success'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
