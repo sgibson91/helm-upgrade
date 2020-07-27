@@ -116,7 +116,7 @@ jobs:
         run: |
           git add coverage_badge.json
           git commit -m "Update coverage badge metadata"
-          git push origin ${{ github.ref }}
+          git push origin ${{ github.event.pull_request.head.label }}
         env:
           GIT_COMMITTER_EMAIL: ci-user@github.local
           GIT_COMMITTER_NAME: CI User
