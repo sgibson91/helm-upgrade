@@ -110,3 +110,11 @@ jobs:
       - name: Run script to update badge metadata
         run: |
           python update_coverage_badge.py
+
+      - name: Commit the edited metadata file
+        uses: EndBug/add-and-commit@v4
+        with:
+          add: 'coverage_badge.json'
+          message: 'Update coverage badge metadata'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
