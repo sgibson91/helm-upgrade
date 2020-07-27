@@ -88,8 +88,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: Download htmlcov artifact
         uses: actions/download-artifact@v2
@@ -115,6 +113,9 @@ jobs:
         uses: EndBug/add-and-commit@v4
         with:
           add: 'coverage_badge.json'
+          author_name: 'CI User'
+          author_email: 'ci-user@github.local'
           message: 'Update coverage badge metadata'
+          ref: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
