@@ -109,9 +109,12 @@ jobs:
           python update_coverage_badge.py
 
       - name: Commit the edited metadata file
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'Update coverage badge metadata'
-          file_pattern: '*.json'
-          commit_user_name: 'CI User'
-          commit_user_email: 'ci-user@github.local'
+        run: |
+          git add coverage_badge.json
+          git commit -m "Update coverage badge metadata"
+          git push origin ${{ github.ref }}
+        env:
+          GIT_COMMITTER_EMAIL: ci-user@github.local
+          GIT_COMMITTER_NAME: CI User
+          GIT_AUTHOR_EMAIL: ci-user@github.local
+          GIT_AUTHOR_NAME: CI User
