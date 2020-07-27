@@ -108,7 +108,7 @@ jobs:
         run: |
           python update_coverage_badge.py
 
-      - name: Commit the edited metadata file
+      - name: Add, Commit, Push the edited metadata file
         run: |
           git add coverage_badge.json
           git commit -m "Update coverage badge metadata"
