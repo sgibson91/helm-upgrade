@@ -96,3 +96,17 @@ jobs:
         with:
           name: htmlcov
           path: htmlcov
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run script to update badge metadata
+        run: |
+          python update_coverage_badge.py
