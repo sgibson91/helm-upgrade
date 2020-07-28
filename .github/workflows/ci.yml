@@ -91,7 +91,12 @@ jobs:
       #   with:
       #     ref: ${{ github.event.pull_request.head.sha }}
 
-      - run: echo ${{ github.event.pull_request.head.label }}
+      - name: Set branch name as env var
+        run: |
+          echo ::set-env name=BRANCH::$(echo ${{ github.event.pull_request.head.label }} | sed 's/\(^.*\)\://g')
+
+      - name: Test env var
+        run: echo "${BRANCH}"
 
       # - name: Download htmlcov artifact
       #   uses: actions/download-artifact@v2
