@@ -91,9 +91,9 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Set branch name as env var
-        run: |
-          echo ::set-env name=BRANCH::$(echo ${{ github.event.pull_request.head.label }} | sed 's/\(^.*\)\://g')
+      # - name: Set branch name as env var
+      #   run: |
+      #     echo ::set-env name=BRANCH::$(echo ${{ github.event.pull_request.head.label }} | sed 's/\(^.*\)\://g')
 
       - name: Download htmlcov artifact
         uses: actions/download-artifact@v2
@@ -118,7 +118,7 @@ jobs:
         run: |
           git add coverage_badge.json
           git commit -m "Update coverage badge metadata"
-          git push origin "${BRANCH}"
+          git push
         env:
           GIT_COMMITTER_EMAIL: ci-user@github.local
           GIT_COMMITTER_NAME: CI User
