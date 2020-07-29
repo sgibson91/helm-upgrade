@@ -1,7 +1,9 @@
 name: CI-test
 
 on:
-  push: [branches]
+  push: 
+    branches:
+      - "**"
 
 jobs:
   run-test-chart:
