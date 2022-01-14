@@ -1,5 +1,6 @@
 import pytest
 import responses
+
 from helm_upgrade.app import get_request
 
 
@@ -8,7 +9,10 @@ def test_get_request():
     test_url = "http://jsonplaceholder.typicode.com/"
 
     responses.add(
-        responses.GET, test_url, json={"key1": "value1"}, status=200,
+        responses.GET,
+        test_url,
+        json={"key1": "value1"},
+        status=200,
     )
 
     resp = get_request(test_url)
