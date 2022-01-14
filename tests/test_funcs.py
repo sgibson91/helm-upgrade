@@ -1,17 +1,18 @@
-import os
-import yaml
 import logging
-import responses
-from unittest.mock import patch
+import os
 from subprocess import check_call
+from unittest.mock import patch
+
+import responses
+import yaml
 from testfixtures import log_capture
-from helm_upgrade.app import check_chart_versions
-from helm_upgrade.app import get_local_chart_versions
-from helm_upgrade.app import get_remote_chart_versions
-from helm_upgrade.app import pull_version_from_chart_file
-from helm_upgrade.app import pull_version_from_github_pages
-from helm_upgrade.app import pull_version_from_github_releases
-from helm_upgrade.app import update_requirements_file
+
+from helm_upgrade.app import (check_chart_versions, get_local_chart_versions,
+                              get_remote_chart_versions,
+                              pull_version_from_chart_file,
+                              pull_version_from_github_pages,
+                              pull_version_from_github_releases,
+                              update_requirements_file)
 
 HERE = os.getcwd()
 
@@ -171,7 +172,10 @@ def test_pull_version_from_chart_file():
     test_url = "http://jsonplaceholder.typicode.com/Chart.yaml"
 
     responses.add(
-        responses.GET, test_url, json={"version": "1.2.3"}, status=200,
+        responses.GET,
+        test_url,
+        json={"version": "1.2.3"},
+        status=200,
     )
 
     test_dict = pull_version_from_chart_file(test_dict, test_dep, test_url)

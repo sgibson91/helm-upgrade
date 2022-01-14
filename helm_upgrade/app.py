@@ -1,13 +1,12 @@
 """Update Helm Chart dependencies."""
-import os
-import yaml
 import logging
-import requests
+import os
+from itertools import compress
 
 import numpy as np
-
+import requests
+import yaml
 from bs4 import BeautifulSoup
-from itertools import compress
 
 HERE = os.getcwd()
 
@@ -36,7 +35,10 @@ def get_request(url: str):
 
 
 def update_requirements_file(
-    chart_name: str, deps_to_update: list, deps: dict, verbose: bool = False,
+    chart_name: str,
+    deps_to_update: list,
+    deps: dict,
+    verbose: bool = False,
 ):
     """Update the Helm Chart requirements.yaml file with new dependency versions
 
@@ -67,7 +69,9 @@ def update_requirements_file(
 
 
 def check_chart_versions(
-    current_deps: dict, new_deps: dict, verbose: bool = False,
+    current_deps: dict,
+    new_deps: dict,
+    verbose: bool = False,
 ) -> list:
     """Check whether the versions of the charts in the current dependencies are
     up-to-date with the remote ones.
@@ -195,17 +199,23 @@ def get_remote_chart_versions(deps: dict, verbose: bool = False) -> dict:
 
         if deps[dep].endswith("Chart.yaml"):
             remote_dependencies = pull_version_from_chart_file(
-                remote_dependencies, dep, deps[dep],
+                remote_dependencies,
+                dep,
+                deps[dep],
             )
 
         elif "/gh-pages/" in deps[dep]:
             remote_dependencies = pull_version_from_github_pages(
-                remote_dependencies, dep, deps[dep],
+                remote_dependencies,
+                dep,
+                deps[dep],
             )
 
         elif deps[dep].endswith("/releases/latest"):
             remote_dependencies = pull_version_from_github_releases(
-                remote_dependencies, dep, deps[dep],
+                remote_dependencies,
+                dep,
+                deps[dep],
             )
 
         else:

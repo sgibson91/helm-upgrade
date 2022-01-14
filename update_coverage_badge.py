@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 from bs4 import BeautifulSoup
 
 HERE = os.getcwd()
