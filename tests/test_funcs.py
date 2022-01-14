@@ -7,12 +7,15 @@ import responses
 import yaml
 from testfixtures import log_capture
 
-from helm_upgrade.app import (check_chart_versions, get_local_chart_versions,
-                              get_remote_chart_versions,
-                              pull_version_from_chart_file,
-                              pull_version_from_github_pages,
-                              pull_version_from_github_releases,
-                              update_requirements_file)
+from helm_upgrade.app import (
+    check_chart_versions,
+    get_local_chart_versions,
+    get_remote_chart_versions,
+    pull_version_from_chart_file,
+    pull_version_from_github_pages,
+    pull_version_from_github_releases,
+    update_requirements_file,
+)
 
 HERE = os.getcwd()
 
