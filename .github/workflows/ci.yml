@@ -1,7 +1,7 @@
 name: CI-test
 
 on:
-  push: 
+  push:
     branches:
       - main
   pull_request:
@@ -9,10 +9,6 @@ on:
       - main
 
 jobs:
-  python-lint-format:
-    uses:
-      sgibson91/.github/.github/workflows/python-lint-format.yaml@main
-
   run-test-chart:
     runs-on: ubuntu-latest
     strategy:
