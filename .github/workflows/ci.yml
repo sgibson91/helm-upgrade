@@ -72,10 +72,9 @@ jobs:
 
       - name: Print coverage report
         run: |
-          coverage report && coverage html
+          coverage report && coverage xml
 
-      - name: Upload htmlcov dir as artifact
-        uses: actions/upload-artifact@v2
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v2
         with:
-          name: htmlcov
-          path: htmlcov/
+          fail_ci_if_error: true
