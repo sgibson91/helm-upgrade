@@ -1,13 +1,6 @@
 # helm-upgrade
 
-[![PyPI version](https://badge.fury.io/py/helm-upgrade.svg)](https://badge.fury.io/py/helm-upgrade) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/sgibson91/helm-upgrade/main.svg)](https://results.pre-commit.ci/latest/github/sgibson91/helm-upgrade/main)
-
-| | Status |
-| :--- | :--- |
-| CI Tests | [![CI-test](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ACI-test+branch%3Amain) |
-| Black | [![Black](https://github.com/sgibson91/helm-upgrade/workflows/Black/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ABlack+branch%3Amain) |
-| Flake8 | [![Flake8](https://github.com/sgibson91/helm-upgrade/workflows/Flake8/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3AFlake8+branch%3Amain) |
-| Coverage | ![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sgibson91/helm-upgrade/main/coverage_badge.json) |
+[![PyPI version](https://badge.fury.io/py/helm-upgrade.svg)](https://badge.fury.io/py/helm-upgrade) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/sgibson91/helm-upgrade/main.svg)](https://results.pre-commit.ci/latest/github/sgibson91/helm-upgrade/main) [![CI-test](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ACI-test+branch%3Amain)
 
 Do you manage a Helm Chart that has dependencies on other Helm Charts?
 Are you fed up of manually updating these dependencies?
