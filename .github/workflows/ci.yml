@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Python 3
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2.3.1
         with:
           python-version: "3.x"
 
@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2.3.1
         with:
           python-version: 3.7
 
@@ -97,7 +97,7 @@ jobs:
           path: htmlcov
 
       - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2.3.1
         with:
           python-version: 3.7
 
