@@ -110,7 +110,7 @@ jobs:
           python update_coverage_badge.py
 
       - name: Add, Commit, Push the edited metadata file
-        uses: EndBug/add-and-commit@v4
+        uses: EndBug/add-and-commit@v7.5.0
         with:
           add: 'coverage_badge.json'
           author_name: CI User
