@@ -47,6 +47,7 @@ jobs:
 
   run-test-suite:
     runs-on: ubuntu-latest
+    environment: codecov
 
     steps:
       - name: Checkout repo
