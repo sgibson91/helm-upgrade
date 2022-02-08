@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  # Also run weekly, to make sure nothing has broken in the interim
+  schedule:
+    - cron: "0 0 * * 1"
 
 jobs:
   run-test-chart:
