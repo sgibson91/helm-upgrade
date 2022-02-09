@@ -89,7 +89,6 @@ optional arguments:
   -h, --help     show this help message and exit
   --dry-run      Perform a dry run of the update. Don't write the changes to a
                  file.
-  -v, --verbose  Option to turn on logging.
 ```
 
 Run the CLI in the directory _above_ your local helm chart.
@@ -114,8 +113,6 @@ In this example, the `name` argument would be `my-local-helm-chart`.
 2) find the latest versions of your desired dependencies from the URLs provided (in JSON schema) to the `dependencies` argument,
 3) compare whether these versions are equal,
 4) if the versions are not equal (and the `--dry-run` flag has not been set), `requirements.yaml` will be overwritten with the new chart versions.
-
-The `--verbose` flag will print logs to the console and the `--dry-run` flag will skip the file writing step.
 
 ### :wheel_of_dharma: Remote Helm Charts
 

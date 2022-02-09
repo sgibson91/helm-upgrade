@@ -1,8 +1,0 @@
-bs4
-coverage
-numpy
-pytest
-pyyaml
-responses
-requests
-testfixtures

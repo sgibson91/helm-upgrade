@@ -42,7 +42,7 @@ When executed, `helm-upgrade` will read in the versions of dependent charts from
 It will then pull the latest versions of these charts from the URL provided on the command line.
 If the two versions do not match, `helm-upgrade` will overwrite `requirements.yaml` with the new version.
 
-There are also optional command line flags for verbose output and to perform a dry run (`requirements.yaml` will not be overwritten).
+There is an optional command line flag to perform a dry run (`requirements.yaml` will not be overwritten).
 
 - :question: Package information for building and distributing to PyPI is contained within `setup.py`
 - :pushpin: The package dependencies are defined in `requirements.txt`

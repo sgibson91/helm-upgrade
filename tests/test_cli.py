@@ -11,20 +11,19 @@ from helm_upgrade.cli import parse_args
         dependencies={"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"},
     ),
 )
-def test_parser_run_basic(mock_args):
+def test_parser_basic(mock_args):
     parser = parse_args(
         [
-            "run",
             "test-chart",
             '{"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"}',
-        ]  # noqa: E501
+        ]
     )
 
     assert parser.chart == "test-chart"
     assert parser.dependencies == {
         "test-dep-1": "v0.10.0",
         "test-dep-2": "0.19.5",
-    }  # noqa: E501
+    }
 
 
 @mock.patch(
@@ -35,74 +34,18 @@ def test_parser_run_basic(mock_args):
         dry_run=True,
     ),
 )
-def test_parser_run_dry_run(mock_args):
+def test_parser_dry_run(mock_args):
     parser = parse_args(
         [
-            "run",
             "test-chart",
             '{"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"}',
             "--dry-run",
-        ]  # noqa: E501
+        ]
     )
 
     assert parser.chart == "test-chart"
     assert parser.dependencies == {
         "test-dep-1": "v0.10.0",
         "test-dep-2": "0.19.5",
-    }  # noqa: E501
+    }
     assert parser.dry_run is True
-
-
-@mock.patch(
-    "argparse.ArgumentParser.parse_args",
-    return_value=argparse.Namespace(
-        chart="test-chart",
-        dependencies={"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"},
-        verbose=True,
-    ),
-)
-def test_parser_run_verbose(mock_args):
-    parser = parse_args(
-        [
-            "run",
-            "test-chart",
-            '{"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"}',
-            "--verbose",
-        ]  # noqa: E501
-    )
-
-    assert parser.chart == "test-chart"
-    assert parser.dependencies == {
-        "test-dep-1": "v0.10.0",
-        "test-dep-2": "0.19.5",
-    }  # noqa: E501
-    assert parser.verbose is True
-
-
-@mock.patch(
-    "argparse.ArgumentParser.parse_args",
-    return_value=argparse.Namespace(
-        chart="test-chart",
-        dependencies={"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"},
-        dry_run=True,
-        verbose=True,
-    ),
-)
-def test_parser_run_dry_run_verbose(mock_args):
-    parser = parse_args(
-        [
-            "run",
-            "test-chart",
-            '{"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"}',
-            "--dry-run",
-            "--verbose",
-        ]  # noqa: E501
-    )
-
-    assert parser.chart == "test-chart"
-    assert parser.dependencies == {
-        "test-dep-1": "v0.10.0",
-        "test-dep-2": "0.19.5",
-    }  # noqa: E501
-    assert parser.dry_run is True
-    assert parser.verbose is True
