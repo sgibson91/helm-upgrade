@@ -19,7 +19,7 @@ responses = "0.18.0"
 testfixtures = "6.18.3"
 
 [tool.poetry.scripts]
-helm-upgrade = "helm_upgrade/cli:main"
+helm-upgrade = "helm_upgrade.cli:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
