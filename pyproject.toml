@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A Python CLI to manage Helm Chart dependencies"
 authors = ["Sarah Gibson <drsarahlgibson@gmail.com>"]
 license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
