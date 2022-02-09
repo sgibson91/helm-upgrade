@@ -123,17 +123,11 @@ def pull_version_from_github_releases(
     """
     res = get_request(url)
     soup = BeautifulSoup(res, "html.parser")
+    titles = soup.find_all("title")
 
-    links = soup.find_all("a", attrs={"title": True})
-
-    for link in links:
-        if (
-            (link.span is not None)
-            and ("v" in link.span.text)
-            and ("." in link.span.text)
-        ):
-
-            output_dict[dependency] = link.span.text
+    for title in titles:
+        match = re.search("v[0-9]*\.[0-9]*\.[0-9]*", title.text)
+        output_dict[dependency] = match.group(0)
 
     return output_dict
 
