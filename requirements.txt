@@ -1,4 +1,0 @@
-bs4==0.01
-numpy==1.22.2
-PyYAML==6.0
-requests==2.27.1
