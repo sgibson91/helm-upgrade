@@ -27,5 +27,5 @@ jobs:
       - name: Build and Publish package
         run: |
           python -m poetry publish --build --no-interaction \
-          --username ${{ github.repository_owner }} \
+          --username "__token__" \
           --password ${{ secrets.PYPI_API_TOKEN }}
