@@ -74,9 +74,7 @@ def check_chart_versions(
         return []
 
 
-def pull_version_from_chart_file(
-    output_dict: dict, dependency: str, url: str
-) -> dict:
+def pull_version_from_chart_file(output_dict: dict, dependency: str, url: str) -> dict:
     """Pull recent, up-to-date version from remote host stored in a Chart.yml
     file.
 
@@ -127,7 +125,7 @@ def pull_version_from_github_releases(
     titles = soup.find_all("title")
 
     for title in titles:
-        match = re.search("v[0-9]*\.[0-9]*\.[0-9]*", title.text)
+        match = re.search(r"v[0-9]*\.[0-9]*\.[0-9]*", title.text)
         output_dict[dependency] = match.group(0)
 
     return output_dict
@@ -213,11 +211,7 @@ def helm_upgrade(
     # Get remote dependencies
     remote_deps = get_remote_chart_versions(dependencies)
     # Check the chart versions
-    charts_to_update = check_chart_versions(
-        local_deps, remote_deps
-    )
+    charts_to_update = check_chart_versions(local_deps, remote_deps)
 
     if (len(charts_to_update) > 0) and (not dry_run):
-        update_requirements_file(
-            chart_path, charts_to_update, remote_deps
-        )
+        update_requirements_file(chart_path, charts_to_update, remote_deps)

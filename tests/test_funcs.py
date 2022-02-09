@@ -157,9 +157,7 @@ def test_pull_version_from_github_releases():
         status=200,
     )
 
-    test_dict = pull_version_from_github_releases(
-        test_dict, test_dep, test_url
-    )
+    test_dict = pull_version_from_github_releases(test_dict, test_dep, test_url)
 
     assert len(test_dict) == 1
     assert list(test_dict.items()) == [(test_dep, "v1.7.1")]

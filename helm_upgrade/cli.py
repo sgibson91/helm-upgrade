@@ -10,11 +10,15 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 def parse_args(args):
     """Parse arguments from the command line"""
-    DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."
+    DESCRIPTION = (
+        "Update the dependencies of a local Helm Chart in a project repository."
+    )
     parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     parser.add_argument(
-        "chart_path", type=str, help="Path to the file containing the dependencies of the local Helm Chart to be updated."
+        "chart_path",
+        type=str,
+        help="Path to the file containing the dependencies of the local Helm Chart to be updated.",
     )
 
     parser.add_argument(
