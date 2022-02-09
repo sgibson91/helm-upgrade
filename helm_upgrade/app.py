@@ -20,20 +20,6 @@ def logging_config():
     )
 
 
-def get_request(url: str):
-    """Send a HTTP GET request to a target URL. Return payload as JSON.
-
-    Args:
-        url (str): The URL to send the request to
-    """
-    resp = requests.get(url)
-
-    if not resp:
-        raise Exception(f"Response not returned by URL: {url}")
-
-    return resp.text
-
-
 def update_requirements_file(
     chart_name: str,
     deps_to_update: list,
