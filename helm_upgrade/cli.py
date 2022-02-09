@@ -14,7 +14,7 @@ def parse_args(args):
     parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     parser.add_argument(
-        "chart", type=str, help="Name of the local Helm Chart to be updated."
+        "chart_path", type=str, help="Path to the file containing the dependencies of the local Helm Chart to be updated."
     )
 
     parser.add_argument(
@@ -40,7 +40,7 @@ def main():
     args = parse_args(sys.argv[1:])
 
     helm_upgrade(
-        args.chart,
+        args.chart_path,
         args.dependencies,
         dry_run=args.dry_run,
     )

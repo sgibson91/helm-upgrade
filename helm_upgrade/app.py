@@ -24,18 +24,19 @@ def get_request(url: str):
 
 
 def update_requirements_file(
-    chart_name: str,
+    chart_path: str,
     deps_to_update: list,
     deps: dict,
 ):
-    """Update the Helm Chart requirements.yaml file with new dependency versions
+    """Update the local Helm Chart with new dependency versions
 
     Args:
-        chart_name (str): The name of the helm chart
+        chart_path (str): Path to the file containing the dependencies of the
+            local helm chart
         deps_to_update (list): The dependencies to be updated
         deps (dict): The dependencies and their versions
     """
-    file_path = os.path.join(HERE, chart_name, "requirements.yaml")
+    file_path = os.path.join(HERE, chart_path)
 
     with open(file_path, "r") as stream:
         chart_yaml = yaml.safe_load(stream)
@@ -178,15 +179,16 @@ def get_remote_chart_versions(deps: dict) -> dict:
     return remote_dependencies
 
 
-def get_local_chart_versions(chart_name: str) -> dict:
+def get_local_chart_versions(chart_path: str) -> dict:
     """The dependency versions currently being installed by the helm chart
 
     Args:
-        chart_name (str): The name of the local helm chart
+        chart_path (str): The path to the file containing the dependencies of
+            the local helm chart
     """
     local_dependencies = {}
 
-    filepath = os.path.join(HERE, chart_name, "requirements.yaml")
+    filepath = os.path.join(HERE, chart_path)
 
     with open(filepath, "r") as stream:
         chart_deps = yaml.safe_load(stream)
@@ -198,20 +200,21 @@ def get_local_chart_versions(chart_name: str) -> dict:
 
 
 def helm_upgrade(
-    chart_name: str,
+    chart_path: str,
     dependencies: dict,
     dry_run: bool = False,
 ):
-    """Upgrade a local helm chart's requirements.yaml to have up-to-date
-    versions of its dependencies.
+    """Upgrade a local helm chart to have up-to-date versions of its
+    dependencies.
 
     Args:
-        chart_name (str): The name of the helm chart
+        chart_path (str): The path to the file that contains the dependencies of
+            the local helm chart to be updated
         dependencies (dict): A list of dependencies to check and host URLs
         dry_run (bool, optional): Don't change any files. Defaults to False.
-     """
+    """
     # Get local dependencies
-    local_deps = get_local_chart_versions(chart_name)
+    local_deps = get_local_chart_versions(chart_path)
     # Get remote dependencies
     remote_deps = get_remote_chart_versions(dependencies)
     # Check the chart versions
@@ -221,5 +224,5 @@ def helm_upgrade(
 
     if (len(charts_to_update) > 0) and (not dry_run):
         update_requirements_file(
-            chart_name, charts_to_update, remote_deps
+            chart_path, charts_to_update, remote_deps
         )
