@@ -37,7 +37,7 @@ jobs:
         env:
           params: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml", "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml", "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"}'
         run: |
-          python -m helm-upgrade test-chart/requirements.yaml '${{ env.params }}'
+          python -m poetry run helm-upgrade test-chart/requirements.yaml '${{ env.params }}'
 
   run-test-suite:
     runs-on: ubuntu-latest
