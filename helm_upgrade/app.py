@@ -1,4 +1,5 @@
 import os
+import re
 from itertools import compress
 
 import numpy as np
@@ -6,7 +7,7 @@ import requests
 import yaml
 from bs4 import BeautifulSoup
 
-HERE = os.getcwd()
+HERE = os.path.abspath(os.getcwd())
 
 
 def get_request(url: str):
