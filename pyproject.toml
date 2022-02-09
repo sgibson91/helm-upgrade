@@ -6,8 +6,8 @@ authors = ["Sarah Gibson <drsarahlgibson@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-bs4 = "0.01"
+python = "^3.8"
+bs4 = "0.0.1"
 numpy = "1.22.2"
 PyYAML = "6.0"
 requests = "2.27.1"
