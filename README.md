@@ -1,13 +1,13 @@
 # helm-upgrade
 
-[![PyPI version](https://badge.fury.io/py/helm-upgrade.svg)](https://badge.fury.io/py/helm-upgrade) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/sgibson91/helm-upgrade/main.svg)](https://results.pre-commit.ci/latest/github/sgibson91/helm-upgrade/main) [![CI-test](https://github.com/sgibson91/helm-upgrade/workflows/CI-test/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions?query=workflow%3ACI-test+branch%3Amain) [![codecov](https://codecov.io/gh/sgibson91/helm-upgrade/branch/main/graph/badge.svg?token=U2HTE7X6BK)](https://codecov.io/gh/sgibson91/helm-upgrade)
+[![PyPI version](https://badge.fury.io/py/helm-upgrade.svg)](https://badge.fury.io/py/helm-upgrade) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/sgibson91/helm-upgrade/main.svg)](https://results.pre-commit.ci/latest/github/sgibson91/helm-upgrade/main) [![CI Tests](https://github.com/sgibson91/helm-upgrade/actions/workflows/ci.yaml/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions/workflows/ci.yaml) [![codecov](https://codecov.io/gh/sgibson91/helm-upgrade/branch/main/graph/badge.svg?token=U2HTE7X6BK)](https://codecov.io/gh/sgibson91/helm-upgrade)
 
 Do you manage a Helm Chart that has dependencies on other Helm Charts?
 Are you fed up of manually updating these dependencies?
 Then this is the tool for you!
 `helm-upgrade` is a Python command line interface (CLI) that automatically updates the dependencies of local Helm Charts.
 
-This tool was inspired by [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) and [Chris Holdgraf's github-activity tool](https://github.com/choldgraf/github-activity).
+This tool was inspired by [`bump-helm-deps-action`](https://github.com/sgibson91/bump-helm-deps-action).
 
 **Table of Contents**
 
@@ -23,7 +23,7 @@ This tool was inspired by [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub
 
 ## :rocket: Installation
 
-It's recommended to use Python version 3.7 with this tool.
+It's recommended to use Python version 3.8 with this tool.
 
 ### :snake: `pip`
 
@@ -41,11 +41,10 @@ cd helm-upgrade
 ```
 
 Use Python to install requirements and the package.
-Python 3.7 is recommended.
+Python 3.8 is recommended.
 
 ```bash
-python -m pip install -r requirements.txt
-python setup.py install
+python -m pip install .
 ```
 
 Test the installation by calling the help page.
@@ -57,62 +56,29 @@ helm-upgrade --help
 ## :recycle: Usage
 
 ```
-usage: helm-upgrade [-h] {version,run} ...
+usage: helm-upgrade [-h] [--dry-run] chart_path dependencies
+
 Update the dependencies of a local Helm Chart in a project repository.
 
 positional arguments:
-  {version,run}
-    version      Print the version and exit
-    run          Update the dependencies of a helm chart
+  chart_path    Path to the file containing the dependencies of the local Helm Chart to
+                be updated.
+  dependencies  A dictionary of Helm Chart dependencies and their host repo URLs. E.g.
+                '{"nginx-ingress":
+                "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-
+                ingress/Chart.yaml"}'
 
 optional arguments:
-  -h, --help     show this help message and exit
+  -h, --help    show this help message and exit
+  --dry-run     Perform a dry run of the update. Don't write the changes to a file.
 ```
-
-```bash
-usage: helm-upgrade version [-h]
-
-optional arguments:
-  -h, --help  show this help message and exit
-```
-
-```bash
-usage: helm-upgrade run [-h] [--dry-run] [-v] chart dependencies
-
-positional arguments:
-  chart          Name of the local Helm Chart to be updated.
-  dependencies   A dictionary of Helm Chart dependencies and their host repo
-                 URLs. E.g. '{"nginx-ingress": "https://raw.githubusercontent.
-                 com/helm/charts/master/stable/nginx-ingress/Chart.yaml"}'
-
-optional arguments:
-  -h, --help     show this help message and exit
-  --dry-run      Perform a dry run of the update. Don't write the changes to a
-                 file.
-```
-
-Run the CLI in the directory _above_ your local helm chart.
-For example:
-
-```bash
-$ ls -R -1
-
-./my-local-helm-chart:
-Chart.yaml
-README.md
-requirements.yaml
-templates/
-values.yaml
-```
-
-In this example, the `name` argument would be `my-local-helm-chart`.
 
 `helm-upgrade` will then:
 
-1) read the current versions of your dependencies from your `requirements.yaml` file,
+1) read the current versions of your dependencies from the file you specify,
 2) find the latest versions of your desired dependencies from the URLs provided (in JSON schema) to the `dependencies` argument,
 3) compare whether these versions are equal,
-4) if the versions are not equal (and the `--dry-run` flag has not been set), `requirements.yaml` will be overwritten with the new chart versions.
+4) if the versions are not equal (and the `--dry-run` flag has not been set), your helm chart dependencies will be overwritten with the new chart versions.
 
 ### :wheel_of_dharma: Remote Helm Charts
 
