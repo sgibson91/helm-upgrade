@@ -61,25 +61,25 @@ def test_check_chart_versions_no_match():
 
 
 def test_get_local_chart_versions():
-    chart_name = os.path.join("tests", "test-chart")
+    chart_path = os.path.join("tests", "test-chart", "requirements.yaml")
     test_deps = {
         "binderhub": "0.2.0-n079.h351d336",
         "nginx-ingress": "1.29.5",
         "cert-manager": "v0.10.0",
     }
 
-    assert get_local_chart_versions(chart_name) == test_deps
+    assert get_local_chart_versions(chart_path) == test_deps
 
 
 def test_get_local_chart_versions_broken():
-    chart_name = os.path.join("tests", "test-chart")
+    chart_path = os.path.join("tests", "test-chart", "requirements.yaml")
     test_deps = {
         "dog": 1,
         "cat": 2,
         "tree": 3,
     }
 
-    assert get_local_chart_versions(chart_name) != test_deps
+    assert get_local_chart_versions(chart_path) != test_deps
 
 
 @responses.activate
@@ -150,11 +150,10 @@ def test_pull_version_from_github_releases():
     test_dep = "dependency"
     test_url = "http://jsonplaceholder.typicode.com/releases/latest/"
 
-    desired_version = "v1.2.3"
     responses.add(
         responses.GET,
         test_url,
-        body=f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>',
+        body='<html lang="en"><title>Release v1.7.1 · cert-manager/cert-manager · GitHub</title</html>',
         status=200,
     )
 
@@ -163,13 +162,13 @@ def test_pull_version_from_github_releases():
     )
 
     assert len(test_dict) == 1
-    assert list(test_dict.items()) == [(test_dep, "v1.2.3")]
+    assert list(test_dict.items()) == [(test_dep, "v1.7.1")]
 
     assert len(responses.calls) == 1
     assert responses.calls[0].request.url == test_url
     assert (
         responses.calls[0].response.text
-        == f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>'
+        == '<html lang="en"><title>Release v1.7.1 · cert-manager/cert-manager · GitHub</title</html>'
     )
 
 
@@ -216,8 +215,7 @@ def test_get_remote_chart_versions_from_github_releases(mocked_func):
 
 
 def test_update_requirements_file():
-    chart_name = os.path.join("tests", "test-chart")
-    filepath = os.path.join(HERE, chart_name, "requirements.yaml")
+    chart_path = os.path.join("tests", "test-chart", "requirements.yaml")
     deps_to_update = ["binderhub", "cert-manager", "nginx-ingress"]
     deps_dict = {
         "binderhub": "1.2.3",
@@ -225,16 +223,16 @@ def test_update_requirements_file():
         "nginx-ingress": "1.2.3",
     }
 
-    checkout_file(filepath)
+    checkout_file(chart_path)
 
     # Read in current deps
-    with open(filepath, "r") as stream:
+    with open(chart_path, "r") as stream:
         deps_before = yaml.safe_load(stream)
 
-    update_requirements_file(chart_name, deps_to_update, deps_dict)
+    update_requirements_file(chart_path, deps_to_update, deps_dict)
 
     # Read in edited deps
-    with open(filepath, "r") as stream:
+    with open(chart_path, "r") as stream:
         deps_after = yaml.safe_load(stream)
 
     assert deps_before != deps_after
