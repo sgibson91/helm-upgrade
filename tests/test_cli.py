@@ -11,10 +11,9 @@ from helm_upgrade.cli import parse_args
         dependencies={"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"},
     ),
 )
-def test_parser_run_basic(mock_args):
+def test_parser_basic(mock_args):
     parser = parse_args(
         [
-            "run",
             "test-chart",
             '{"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"}',
         ]  # noqa: E501
@@ -35,10 +34,9 @@ def test_parser_run_basic(mock_args):
         dry_run=True,
     ),
 )
-def test_parser_run_dry_run(mock_args):
+def test_parser_dry_run(mock_args):
     parser = parse_args(
         [
-            "run",
             "test-chart",
             '{"test-dep-1": "v0.10.0", "test-dep-2": "0.19.5"}',
             "--dry-run",
