@@ -32,13 +32,6 @@ def parse_args(args):
         help="Perform a dry run of the update. Don't write the changes to a file.",  # noqa: E501
     )
 
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="Option to turn on logging.",  # noqa: E501
-    )
-
     return parser.parse_args()
 
 
@@ -50,7 +43,6 @@ def main():
         args.chart,
         args.dependencies,
         dry_run=args.dry_run,
-        verbose=args.verbose,  # noqa: E501
     )
 
 
