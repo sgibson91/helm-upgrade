@@ -1,11 +1,9 @@
-import logging
 import os
 from subprocess import check_call
 from unittest.mock import patch
 
 import responses
 import yaml
-from testfixtures import log_capture
 
 from helm_upgrade.app import (
     check_chart_versions,
