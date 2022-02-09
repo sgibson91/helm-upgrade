@@ -74,7 +74,7 @@ def check_chart_versions(
 
 def pull_version_from_chart_file(
     output_dict: dict, dependency: str, url: str
-) -> dict:  # noqa: E501
+) -> dict:
     """Pull recent, up-to-date version from remote host stored in a Chart.yml
     file.
 
@@ -217,7 +217,7 @@ def helm_upgrade(
     # Check the chart versions
     charts_to_update = check_chart_versions(
         local_deps, remote_deps
-    )  # noqa: E501
+    )
 
     if (len(charts_to_update) > 0) and (not dry_run):
         update_requirements_file(

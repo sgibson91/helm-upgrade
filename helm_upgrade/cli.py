@@ -10,7 +10,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 def parse_args(args):
     """Parse arguments from the command line"""
-    DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."  # noqa: E501
+    DESCRIPTION = "Update the dependencies of a local Helm Chart in a project repository."
     parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     parser.add_argument(
@@ -29,7 +29,7 @@ def parse_args(args):
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Perform a dry run of the update. Don't write the changes to a file.",  # noqa: E501
+        help="Perform a dry run of the update. Don't write the changes to a file.",
     )
 
     return parser.parse_args()

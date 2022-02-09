@@ -120,11 +120,11 @@ def test_pull_version_from_github_pages():
                     {
                         "created": "2020-07-26T15:33:00.0000000Z",
                         "version": "1.2.3",
-                    },  # noqa: E501
+                    },
                     {
                         "created": "2020-07-25T15:33:00.0000000Z",
                         "version": "1.2.2",
-                    },  # noqa: E501
+                    },
                 ]
             }
         },
@@ -140,7 +140,7 @@ def test_pull_version_from_github_pages():
     assert responses.calls[0].request.url == test_url
     assert (
         responses.calls[0].response.text
-        == '{"entries": {"dependency": [{"created": "2020-07-26T15:33:00.0000000Z", "version": "1.2.3"}, {"created": "2020-07-25T15:33:00.0000000Z", "version": "1.2.2"}]}}'  # noqa: E501
+        == '{"entries": {"dependency": [{"created": "2020-07-26T15:33:00.0000000Z", "version": "1.2.3"}, {"created": "2020-07-25T15:33:00.0000000Z", "version": "1.2.2"}]}}'
     )
 
 
@@ -154,13 +154,13 @@ def test_pull_version_from_github_releases():
     responses.add(
         responses.GET,
         test_url,
-        body=f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>',  # noqa: E501
+        body=f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>',
         status=200,
     )
 
     test_dict = pull_version_from_github_releases(
         test_dict, test_dep, test_url
-    )  # noqa: E501
+    )
 
     assert len(test_dict) == 1
     assert list(test_dict.items()) == [(test_dep, "v1.2.3")]
@@ -169,7 +169,7 @@ def test_pull_version_from_github_releases():
     assert responses.calls[0].request.url == test_url
     assert (
         responses.calls[0].response.text
-        == f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>'  # noqa: E501
+        == f'<html lang="en"><a href="/user/repo/tree/{desired_version}" title="{desired_version}"><span>{desired_version}</span></a></html>'
     )
 
 
@@ -179,7 +179,7 @@ def test_pull_version_from_github_releases():
 )
 def test_get_remote_chart_versions_from_chart(mocked_func):
     test_deps = {
-        "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"  # noqa: E501
+        "nginx-ingress": "https://raw.githubusercontent.com/helm/charts/master/stable/nginx-ingress/Chart.yaml"
     }
     test_result = get_remote_chart_versions(test_deps)
 
@@ -193,7 +193,7 @@ def test_get_remote_chart_versions_from_chart(mocked_func):
 )
 def test_get_remote_chart_versions_from_github_pages(mocked_func):
     test_deps = {
-        "binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"  # noqa: E501
+        "binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"
     }
     test_result = get_remote_chart_versions(test_deps)
 
@@ -207,7 +207,7 @@ def test_get_remote_chart_versions_from_github_pages(mocked_func):
 )
 def test_get_remote_chart_versions_from_github_releases(mocked_func):
     test_deps = {
-        "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"  # noqa: E501
+        "cert-manager": "https://github.com/jetstack/cert-manager/releases/latest"
     }
     test_result = get_remote_chart_versions(test_deps)
 
