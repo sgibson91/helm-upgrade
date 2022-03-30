@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "helm-upgrade"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python CLI to manage Helm Chart dependencies"
 authors = ["Sarah Gibson <drsarahlgibson@gmail.com>"]
 license = "MIT"
@@ -10,13 +10,14 @@ readme = "README.md"
 python = "^3.8"
 bs4 = "0.0.1"
 numpy = "1.22.3"
-PyYAML = "6.0"
 requests = "2.27.1"
+"ruamel.yaml" = "^0.17.21"
 
 [tool.poetry.dev-dependencies]
 coverage = "6.3.2"
 pytest = "7.1.1"
 responses = "0.20.0"
+pre-commit = "^2.17.0"
 
 [tool.poetry.scripts]
 helm-upgrade = "helm_upgrade.cli:main"
