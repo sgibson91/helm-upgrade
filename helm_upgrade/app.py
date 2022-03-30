@@ -4,8 +4,8 @@ from itertools import compress
 
 import numpy as np
 import requests
-from ruamel.yaml import YAML
 from bs4 import BeautifulSoup
+from ruamel.yaml import YAML
 
 HERE = os.path.abspath(os.getcwd())
 yaml = YAML(typ="safe", pure=True)
