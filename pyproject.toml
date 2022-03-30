@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "helm-upgrade"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python CLI to manage Helm Chart dependencies"
 authors = ["Sarah Gibson <drsarahlgibson@gmail.com>"]
 license = "MIT"
