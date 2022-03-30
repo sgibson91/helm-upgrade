@@ -3,7 +3,7 @@ from subprocess import check_call
 from unittest.mock import patch
 
 import responses
-import yaml
+from ruamel.yaml import YAML
 
 from helm_upgrade.app import (
     check_chart_versions,
@@ -16,6 +16,7 @@ from helm_upgrade.app import (
 )
 
 HERE = os.getcwd()
+yaml = YAML(typ="safe", pure=True)
 
 
 # Helper function: Not a test!
@@ -223,12 +224,12 @@ def test_update_requirements_file():
 
     # Read in current deps
     with open(chart_path, "r") as stream:
-        deps_before = yaml.safe_load(stream)
+        deps_before = yaml.load(stream)
 
     update_requirements_file(chart_path, deps_to_update, deps_dict)
 
     # Read in edited deps
     with open(chart_path, "r") as stream:
-        deps_after = yaml.safe_load(stream)
+        deps_after = yaml.load(stream)
 
     assert deps_before != deps_after

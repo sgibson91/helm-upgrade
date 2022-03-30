@@ -4,10 +4,11 @@ from itertools import compress
 
 import numpy as np
 import requests
-import yaml
+from ruamel.yaml import YAML
 from bs4 import BeautifulSoup
 
 HERE = os.path.abspath(os.getcwd())
+yaml = YAML(typ="safe", pure=True)
 
 
 def get_request(url: str):
@@ -40,7 +41,7 @@ def update_requirements_file(
     file_path = os.path.join(HERE, chart_path)
 
     with open(file_path, "r") as stream:
-        chart_yaml = yaml.safe_load(stream)
+        chart_yaml = yaml.load(stream)
 
     for dep in deps_to_update:
         for dependency in chart_yaml["dependencies"]:
@@ -48,7 +49,7 @@ def update_requirements_file(
                 dependency["version"] = deps[dep]
 
     with open(file_path, "w") as stream:
-        yaml.safe_dump(chart_yaml, stream)
+        yaml.dump(chart_yaml, stream)
 
 
 def check_chart_versions(
@@ -83,7 +84,7 @@ def pull_version_from_chart_file(output_dict: dict, dependency: str, url: str) -
         dependency (str): The dependency to get a new version for
         url (str): The URL of the remotely hosted versions
     """
-    chart_reqs = yaml.safe_load(get_request(url))
+    chart_reqs = yaml.load(get_request(url))
     output_dict[dependency] = chart_reqs["version"]
 
     return output_dict
@@ -100,7 +101,7 @@ def pull_version_from_github_pages(
         dependency (str): The dependency to get a version for
         url (str): The URL of the remotely hosted versions
     """
-    chart_reqs = yaml.safe_load(get_request(url))
+    chart_reqs = yaml.load(get_request(url))
     updates_sorted = sorted(
         chart_reqs["entries"][dependency], key=lambda k: k["created"]
     )
@@ -184,7 +185,7 @@ def get_local_chart_versions(chart_path: str) -> dict:
     filepath = os.path.join(HERE, chart_path)
 
     with open(filepath, "r") as stream:
-        chart_deps = yaml.safe_load(stream)
+        chart_deps = yaml.load(stream)
 
     for dependency in chart_deps["dependencies"]:
         local_dependencies[dependency["name"]] = dependency["version"]
