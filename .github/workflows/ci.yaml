@@ -67,7 +67,7 @@ jobs:
 
       - name: Run tests and generate coverage report
         run: |
-          python -m coverage run -m pytest -vvv && coverage xml
+          python -m coverage run -m pytest -vvv --color=yes && coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
