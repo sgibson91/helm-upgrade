@@ -223,13 +223,13 @@ def test_update_requirements_file():
     checkout_file(chart_path)
 
     # Read in current deps
-    with open(chart_path, "r") as stream:
+    with open(chart_path) as stream:
         deps_before = yaml.load(stream)
 
     update_requirements_file(chart_path, deps_to_update, deps_dict)
 
     # Read in edited deps
-    with open(chart_path, "r") as stream:
+    with open(chart_path) as stream:
         deps_after = yaml.load(stream)
 
     assert deps_before != deps_after
