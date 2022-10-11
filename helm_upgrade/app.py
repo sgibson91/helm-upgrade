@@ -40,7 +40,7 @@ def update_requirements_file(
     """
     file_path = os.path.join(HERE, chart_path)
 
-    with open(file_path, "r") as stream:
+    with open(file_path) as stream:
         chart_yaml = yaml.load(stream)
 
     for dep in deps_to_update:
@@ -184,7 +184,7 @@ def get_local_chart_versions(chart_path: str) -> dict:
 
     filepath = os.path.join(HERE, chart_path)
 
-    with open(filepath, "r") as stream:
+    with open(filepath) as stream:
         chart_deps = yaml.load(stream)
 
     for dependency in chart_deps["dependencies"]:
