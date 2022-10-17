@@ -1,5 +1,7 @@
 # helm-upgrade
 
+⚠️ **This repository is archived and no longer actively maintained!** ⚠️
+
 [![PyPI version](https://badge.fury.io/py/helm-upgrade.svg)](https://badge.fury.io/py/helm-upgrade) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/sgibson91/helm-upgrade/main.svg)](https://results.pre-commit.ci/latest/github/sgibson91/helm-upgrade/main) [![CI Tests](https://github.com/sgibson91/helm-upgrade/actions/workflows/ci.yaml/badge.svg)](https://github.com/sgibson91/helm-upgrade/actions/workflows/ci.yaml) [![codecov](https://codecov.io/gh/sgibson91/helm-upgrade/branch/main/graph/badge.svg?token=U2HTE7X6BK)](https://codecov.io/gh/sgibson91/helm-upgrade)
 
 Do you manage a Helm Chart that has dependencies on other Helm Charts?
